@@ -31,6 +31,9 @@ class Blockchain:
         block_obj = Block(block)
         self.chain.append(block_obj)
 
+    def validate_chain(self):
+        pass
+
 if __name__ == '__main__':
     bc = Blockchain()
     bc.__genesis()
