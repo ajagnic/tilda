@@ -20,6 +20,9 @@ class Blockchain:
     def __revert_to_valid_block(self):
         self.__genesis()# NOTE TEMP
 
+    def __proof_of_work(self):
+        pass
+
     def _save_local(self):
         """ Locally store blockchain as file """
         pass
