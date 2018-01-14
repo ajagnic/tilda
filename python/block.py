@@ -33,6 +33,7 @@ class Block:
                     self._properties = {}
                     return None
             self._properties['hash'] = self.sha(self._properties)
+            # store properties as immmutable
             self.__data = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'])
 
     @staticmethod
