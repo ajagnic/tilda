@@ -20,10 +20,10 @@ class Block:
         self.__accepted_keys = ('index', 'timestamp', 'data', 'hash', 'prev_hash', 'sender', 'recipient', 'nonce')
 
     def __set_properties(self, dictionary):
+        self._properties = {}
         valid = self.verify_dict(dictionary)
         if valid is False:
             return None
-        self._properties = {}
         for key, value in dictionary.items():
             self._properties[key] = value
         self._properties['hash'] = self.sha(self._properties)
