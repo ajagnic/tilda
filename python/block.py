@@ -32,16 +32,15 @@ class Block:
                 else:
                     self._properties = {}
                     return None
+            self._properties['hash'] = self.sha(self._properties)
+            self.__data = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'])
 
     @staticmethod
-    def sha(index, timestamp, data, hsh, prev_hash): # refactor to accept block properties
+    def sha(properties):
         """ Method that accepts fields of a Block, returns hash of all fields
-        :type index: int
-        :type timestamp: int
-        :type data: multiple types allowed *NOTE TODO*
-        :type hsh: str
-        :type prev_hash: str
+        :param properties: properties of a Block instance
+        :type properties: dict
         """
-        cat = str(index) + str(timestamp) + str(data) + str(hsh) + str(prev_hash)
+        cat = str(properties['index']) + str(properties['timestamp']) + str(properties['data']) + str(properties['prev_hash'])
         hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
