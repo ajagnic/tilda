@@ -14,7 +14,7 @@ class Blockchain:
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
         self.chain = []
-        genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python3', 'code': "print('Genesis')"}, 'hash':0, 'prev_hash':0})
+        genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0})
         self.chain.append(genesis_block)
 
     def get_latest_block(self):
