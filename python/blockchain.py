@@ -18,6 +18,21 @@ class Blockchain:
     def get_latest_block(self):
         return self.chain[(len(self.chain) - 1)]
 
-    def add_new_block(self, block):
-        blocked = Block(block)
-        self.chain.append(blocked)
+    def add_new_block(self, data):
+        prev_block = self.get_latest_block()
+        prev_props = prev_block.get_properties()
+        block = {
+            'index':(prev_props[0] + 1),
+            'timestamp':time.time(),
+            'data': data,
+            'hash':0,
+            'prev_hash':prev_props[3]
+        }
+        block_obj = Block(block)
+        self.chain.append(block_obj)
+
+if __name__ == '__main__':
+    bc = Blockchain()
+    bc.__genesis()
+    blok = bc.get_latest_block()
+    print(blok.get_properties())
