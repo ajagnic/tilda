@@ -36,6 +36,10 @@ class Block:
             # store properties as immmutable
             self.__properties = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'])
 
+    def get_properties(self):
+        """ Returns tuple of Block instance property values """
+        return self.__properties
+
     @staticmethod
     def sha(properties):
         """ Method that accepts fields of a Block, returns hash of all fields
