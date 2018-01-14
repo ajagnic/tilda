@@ -40,7 +40,7 @@ class Block:
         """ Returns tuple of Block instance property values """
         return self.__properties
 
-    def load_program_data(self):
+    def load_program(self):
         pass
 
     @staticmethod
