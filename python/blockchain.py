@@ -14,7 +14,7 @@ class Blockchain:
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
         self.chain = []
-        genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0})
+        genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0})
         self.chain.append(genesis_block)
 
     def __revert_to_valid_block(self):
@@ -31,7 +31,7 @@ class Blockchain:
         """ Returns last Block obj in chain """
         return self.chain[(len(self.chain) - 1)]
 
-    def add_new_block(self, data):# NOTE TODO ADD PROOF OF WORK
+    def add_new_block(self, data, sender, recipient):# NOTE TODO ADD PROOF OF WORK
         """ Add new block to chain, calculating hash and verifying
         :param data: data of new block
         :type data: dict, str, int
@@ -43,10 +43,12 @@ class Blockchain:
             'timestamp': time.time(),
             'data': data,
             'hash': 0,
-            'prev_hash': prev_props[3]
+            'prev_hash': prev_props[3],
+            'sender': sender,
+            'recipient': recipient,
+            'nonce':0
         }
         new_block = Block(block)
-        self.chain.append(new_block)
         return self.validate_chain()
 
     def validate_chain(self):

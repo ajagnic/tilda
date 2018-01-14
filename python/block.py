@@ -17,20 +17,18 @@ class Block:
 
     def __set_accepted_keys(self):
         # accepted keys are stored as a tuple to avoid re-assignment
-        self.__accepted_keys = ('index', 'timestamp', 'data', 'hash', 'prev_hash')
+        self.__accepted_keys = ('index', 'timestamp', 'data', 'hash', 'prev_hash', 'sender', 'recipient', 'nonce')
 
     def __set_properties(self, dictionary):
+        valid = self.verify_dict(dictionary)
+        if valid is False:
+            return None
         self._properties = {}
-        if len(dictionary) == len(self.get_accepted_keys()):
-            for key, value in dictionary.items():
-                if key in self.get_accepted_keys():
-                    self._properties[key] = value
-                else:
-                    self._properties = {}
-                    return None
-            self._properties['hash'] = self.sha(self._properties)
-            # store properties as immmutable
-            self.__properties = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'])
+        for key, value in dictionary.items():
+            self._properties[key] = value
+        self._properties['hash'] = self.sha(self._properties)
+        # store properties as immmutable
+        self.__properties = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'], self._properties['sender'], self._properties['recipient'], self._properties['nonce'])
 
     def get_accepted_keys(self):
         """ Return list of accepted keys to use for initializing a Block """
@@ -43,12 +41,21 @@ class Block:
     def load_program(self):
         pass
 
+    def verify_dict(self, dictionary):
+        if len(dictionary) == len(self.get_accepted_keys()):
+            for key, value in dictionary.items():
+                if key in self.get_accepted_keys():
+                    pass
+                else:
+                    return False
+            return True
+
     @staticmethod
     def sha(properties):
         """ Method that accepts fields of a Block, returns hash of all fields
         :param properties: properties of a Block instance
         :type properties: dict
         """
-        cat = str(properties['index']) + str(properties['timestamp']) + str(properties['data']) + str(properties['prev_hash'])
+        cat = str(properties['index']) + str(properties['timestamp']) + str(properties['data']) + str(properties['prev_hash']) + str(properties['sender']) + str(properties['recipient']) + str(properties['nonce'])
         hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
