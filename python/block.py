@@ -19,10 +19,6 @@ class Block:
         # accepted keys are stored as a tuple to avoid re-assignment
         self.__accepted_keys = ('index', 'timestamp', 'data', 'hash', 'prev_hash')
 
-    def get_accepted_keys(self):
-        """ Return list of accepted keys to use for initializing a Block """
-        return self.__accepted_keys
-
     def __set_properties(self, dictionary):
         self._properties = {}
         if len(dictionary) == len(self.get_accepted_keys()):
@@ -35,6 +31,10 @@ class Block:
             self._properties['hash'] = self.sha(self._properties)
             # store properties as immmutable
             self.__properties = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'])
+
+    def get_accepted_keys(self):
+        """ Return list of accepted keys to use for initializing a Block """
+        return self.__accepted_keys
 
     def get_properties(self):
         """ Returns tuple of Block instance property values """

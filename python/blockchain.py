@@ -17,6 +17,13 @@ class Blockchain:
         genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0})
         self.chain.append(genesis_block)
 
+    def __revert_to_valid_block(self):
+        self.__genesis()# NOTE TEMP
+
+    def _save_local(self):
+        """ Locally store blockchain as file """
+        pass
+
     def get_latest_block(self):
         """ Returns last Block obj in chain """
         return self.chain[(len(self.chain) - 1)]
@@ -59,9 +66,6 @@ class Blockchain:
                 self.__revert_to_valid_block()
                 return False
         return True
-
-    def __revert_to_valid_block(self):
-        self.__genesis()# NOTE TEMP
 
     def update(self):
         pass
