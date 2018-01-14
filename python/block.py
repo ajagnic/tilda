@@ -40,6 +40,9 @@ class Block:
         """ Returns tuple of Block instance property values """
         return self.__properties
 
+    def load_program_data(self):
+        pass
+
     @staticmethod
     def sha(properties):
         """ Method that accepts fields of a Block, returns hash of all fields
