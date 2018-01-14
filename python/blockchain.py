@@ -44,16 +44,16 @@ class Blockchain:
         for i in range(1, (len(self.chain) - 1)):
             cur_block = self.chain[i]
             prev_block = self.chain[i - 1]
-            if cur_block.__properties[0] != (prev_block.__properties[0] + 1):
+            if cur_block._Block__properties[0] != (prev_block._Block__properties[0] + 1):
                 self.__revert_to_valid_block()
                 return False
-            if cur_block.__properties[3] != Block.sha(cur_block._properties):
+            if cur_block._Block__properties[3] != Block.sha(cur_block._properties):
                 self.__revert_to_valid_block()
                 return False
-            if cur_block.__properties[4] != prev_block.__properties[3]:
+            if cur_block._Block__properties[4] != prev_block._Block__properties[3]:
                 self.__revert_to_valid_block()
                 return False
-            if cur_block.__properties[4] != Block.sha(prev_block._properties):
+            if cur_block._Block__properties[4] != Block.sha(prev_block._properties):
                 self.__revert_to_valid_block()
                 return False
         return True
