@@ -34,7 +34,7 @@ class Block:
                     return None
 
     @staticmethod
-    def hash(index, timestamp, data, hsh, prev_hash):
+    def sha(index, timestamp, data, hsh, prev_hash): # refactor to accept block properties
         """ Method that accepts fields of a Block, returns hash of all fields
         :type index: int
         :type timestamp: int
