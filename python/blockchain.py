@@ -32,19 +32,25 @@ class Blockchain:
         self.chain.append(block_obj)
 
     def validate_chain(self):
-        for(i in range(1, (len(self.chain) - 1))):
+        fail = 'None'
+        for i in range(1, (len(self.chain) - 1)):
             cur_block = self.chain[i]
             prev_block = self.chain[i - 1]
-            if cur_block._properties['index'] is not (prev_block._properties['index'] + 1):
+            if cur_block._properties['index'] != (prev_block._properties['index'] + 1):
+                print('index')
                 return False
-            else if cur_block._properties['hash'] is not Block.sha(cur_block._properties):
+            elif str(cur_block._properties['hash']) != str(Block.sha(cur_block._properties)):
+                print(cur_block._properties['hash'])
+                print(Block.sha(cur_block._properties))
                 return False
-            else if cur_block._properties['prev_hash'] is not prev_block._properties['hash']:
+            elif cur_block._properties['prev_hash'] != prev_block._properties['hash']:
+                print('prev hash')
                 return False
-            else if cur_block._properties['prev_hash'] is not Block.sha(prev_block._properties):
+            elif cur_block._properties['prev_hash'] != Block.sha(prev_block._properties):
+                print('prev hash')
                 return False
-            else:
-                return True
+        return True
+
 
     def __revert_to_valid_block(self):
         pass
