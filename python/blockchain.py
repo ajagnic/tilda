@@ -49,6 +49,7 @@ class Blockchain:
             'nonce':0
         }
         new_block = Block(block)
+        self.chain.append(new_block)
         return self.validate_chain()
 
     def validate_chain(self):
