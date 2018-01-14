@@ -37,26 +37,29 @@ class Blockchain:
         }
         new_block = Block(block)
         self.chain.append(new_block)
-        valid = self.validate_chain()
-        if valid is False:
-            self.__revert_to_valid_block()
+        return self.validate_chain()
 
-    def validate_chain(self):# NOTE TODO REFACTOR
+    def validate_chain(self):
+        """ Loop through chain, verifying index, hash, and previous hash values """
         for i in range(1, (len(self.chain) - 1)):
             cur_block = self.chain[i]
             prev_block = self.chain[i - 1]
-            if cur_block._properties['index'] != (prev_block._properties['index'] + 1):
+            if cur_block.__properties[0] != (prev_block.__properties[0] + 1):
+                self.__revert_to_valid_block()
                 return False
-            elif cur_block._properties['hash'] != Block.sha(cur_block._properties):
+            if cur_block.__properties[3] != Block.sha(cur_block._properties):
+                self.__revert_to_valid_block()
                 return False
-            elif cur_block._properties['prev_hash'] != prev_block._properties['hash']:
+            if cur_block.__properties[4] != prev_block.__properties[3]:
+                self.__revert_to_valid_block()
                 return False
-            elif cur_block._properties['prev_hash'] != Block.sha(prev_block._properties):
+            if cur_block.__properties[4] != Block.sha(prev_block._properties):
+                self.__revert_to_valid_block()
                 return False
         return True
 
     def __revert_to_valid_block(self):
-        self.chain = []# TEMP
+        self.__genesis()# NOTE TEMP
 
     def update(self):
         pass
