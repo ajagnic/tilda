@@ -22,8 +22,15 @@ class Blockchain:
         print("REVERTED")
         self.__genesis()# NOTE TEMP
 
-    def __proof_of_work(self):# NOTE try to make static
-        pass
+    def __proof_of_work(self, dictionary):
+        """
+        """
+        dictionary['nonce'] = 0
+        hashed = Block.sha(dictionary)
+        while hashed[0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
+            dictionary['nonce'] += 1
+            hashed = Block.sha(dictionary)
+        return dictionary
 
     def __set_difficulty(self, difficulty):
         """ Create immutable property of blockchain POW difficulty
@@ -40,7 +47,7 @@ class Blockchain:
         """ Returns last Block obj in chain """
         return self.chain[(len(self.chain) - 1)]
 
-    def add_new_block(self, data, sender, recipient):# NOTE TODO ADD PROOF OF WORK
+    def add_new_block(self, data, sender, recipient):
         """ Add new block to chain, calculating hash and verifying
         :param data: data of new block
         :type data: dict, str, int
@@ -61,7 +68,8 @@ class Blockchain:
             'recipient': recipient,
             'nonce':0
         }
-        new_block = Block(block)
+        proofed_block = self.__proof_of_work(block)
+        new_block = Block(proofed_block)
         self.chain.append(new_block)
         self.validate_chain()
 
