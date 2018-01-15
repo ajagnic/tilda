@@ -36,9 +36,6 @@ class Blockchain:
         """ Locally store blockchain as file """
         pass
 
-    def get_difficulty(self):
-        return self.__difficulty
-
     def get_latest_block(self):
         """ Returns last Block obj in chain """
         return self.chain[(len(self.chain) - 1)]
