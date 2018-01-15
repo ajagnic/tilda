@@ -16,7 +16,7 @@ class Blockchain:
         self.chain = []
         genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0})
         self.chain.append(genesis_block)
-        self.add_new_block('buffer', 0, 0)# NOTE TODO FIX VALIDATION STARTING ON 1st INDEX
+        # self.add_new_block('buffer', 0, 0)# NOTE TODO FIX VALIDATION STARTING ON 1st INDEX
 
     def __revert_to_valid_block(self):
         print("REVERTED")
@@ -65,7 +65,6 @@ class Blockchain:
             except AttributeError:
                 self.__revert_to_valid_block()
             else:
-                print(i)
                 if len(cur_block._properties) == 0:
                     self.__revert_to_valid_block()
                 if cur_props[0] != (prev_props[0] + 1):
