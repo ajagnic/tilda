@@ -52,7 +52,7 @@ class Blockchain:
     def add_new_block(self, data, sender, recipient):
         """ Add new block to chain, calculating hash and verifying
         :param data: data of new block
-        :type data: dict, str, int
+        :type data: dict, str, int, arr
         :param sender: origin of block data
         :type sender: str
         :param recipient: destination of block data
@@ -75,7 +75,8 @@ class Blockchain:
         self.validate_chain()
 
     def validate_chain(self):
-        """ Loop through chain, verifying index, hash, and previous hash values """
+        """ Loop through chain, verifying index, hash, and previous hash values
+        """
         pass
 
     @staticmethod
@@ -92,3 +93,11 @@ class Blockchain:
             if a_props[i] != b_props[i]:
                 return False
         return True
+
+    @staticmethod
+    def validate_block(cur_block, prev_block):
+        """
+        :type cur_block: Block obj
+        :type prev_block: Block obj
+        """
+        pass
