@@ -17,7 +17,8 @@ class Block:
 
     def __set_accepted_keys(self):
         # accepted keys are stored as a tuple to avoid re-assignment
-        self.__accepted_keys = ('index', 'timestamp', 'data', 'hash', 'prev_hash', 'sender', 'recipient', 'nonce')
+        # hash value will be generated in set_props
+        self.__accepted_keys = ('index', 'timestamp', 'data', 'prev_hash', 'sender', 'recipient', 'nonce')
 
     def __set_properties(self, dictionary):
         self._properties = {}
