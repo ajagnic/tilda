@@ -96,8 +96,15 @@ class Blockchain:
 
     @staticmethod
     def validate_block(cur_block, prev_block):
-        """
+        """ Validate values of a block addition, return true if correct
         :type cur_block: Block obj
         :type prev_block: Block obj
         """
-        pass
+        cur_props = cur_block.get_properties()
+        prev_props = prev_block.get_properties()
+        if cur_props[0] != (prev_props[0] + 1):
+            return False
+        elif cur_props[3] != prev_props[6]:
+            return False
+        else:
+            return True
