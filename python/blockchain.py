@@ -24,7 +24,9 @@ class Blockchain:
         self.__genesis()# NOTE TEMP
 
     def __proof_of_work(self, dictionary):
-        """
+        """ Calculate a nonce value that results in a Block hash with an amount of leading zeros equal to difficulty
+        :param dictionary: Block properties
+        :type dictionary: dict
         """
         hashed = Block.sha(dictionary)
         while hashed[0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
@@ -62,20 +64,31 @@ class Blockchain:
             'index': (prev_props[0] + 1),
             'timestamp': time.time(),
             'data': data,
-            'hash': 0,
             'prev_hash': prev_props[3],
             'sender': sender,
             'recipient': recipient,
             'nonce':0
         }
         proofed_block = self.__proof_of_work(block)
-        new_block = Block(proofed_block)
-        self.chain.append(new_block)
+        valid_block = Block(proofed_block)
+        self.chain.append(valid_block)
         self.validate_chain()
 
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
         pass
 
-    def update(self):
-        pass
+    @staticmethod
+    def comparator(block_a, block_b):
+        """ Compare values of two Blocks, return true if equal
+        :type block_a: Block obj
+        :type block_b: Block obj
+        """
+        a_props = block_a.get_properties()
+        b_props = block_b.get_properties()
+        if len(a_props) != len(b_props):
+            return False
+        for i in range(0, len(a_props)):
+            if a_props[i] != b_props[i]:
+                return False
+        return True
