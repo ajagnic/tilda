@@ -9,13 +9,14 @@ class Blockchain:
     """ Defines the blockchain and its methods """
 
     def __init__(self):
-        self.__genesis()
         self.__set_difficulty(4)
+        self.__genesis()
 
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
         self.chain = []
-        genesis_block = Block({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'hash':0, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0})
+        proofed_gen_dict = self.__proof_of_work({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0})
+        genesis_block = Block(proofed_gen_dict)
         self.chain.append(genesis_block)
 
     def __revert_to_valid_block(self):
@@ -25,7 +26,6 @@ class Blockchain:
     def __proof_of_work(self, dictionary):
         """
         """
-        dictionary['nonce'] = 0
         hashed = Block.sha(dictionary)
         while hashed[0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
             dictionary['nonce'] += 1
