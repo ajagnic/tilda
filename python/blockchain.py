@@ -77,7 +77,20 @@ class Blockchain:
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values
         """
-        pass
+        for i in range(0, len(self.chain)):
+            if i == 0:
+                # generate genesis block NOTE TODO
+                # if self.comparator(self.chain[i], temp_genesis_block):
+                #   pass
+                # else:
+                #   return False
+            else:
+                if self.validate_block(self.chain[i], self.chain[i - 1]):
+                    return True
+                else:
+                    self.__revert_to_valid_block()
+                    return False
+
 
     @staticmethod
     def comparator(block_a, block_b):
