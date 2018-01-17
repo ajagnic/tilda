@@ -8,8 +8,8 @@ __author__ = 'Adrian Agnic'
 class Blockchain:
     """ Defines the blockchain and its methods """
 
-    def __init__(self):
-        self.__set_difficulty(5)
+    def __init__(self, difficulty):
+        self.__set_difficulty(difficulty)
         self.__genesis()
 
     def __genesis(self):
@@ -67,11 +67,12 @@ class Blockchain:
             return None
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
+        print(prev_props)
         block = {
             'data': data,
             'index': (prev_props[2] + 1),
             'nonce':0,
-            'prev_hash': prev_props[6],
+            'prev_hash': prev_props[7],
             'recipient': recipient,
             'sender': sender,
             'timestamp': time.time()
@@ -84,11 +85,11 @@ class Blockchain:
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values
         """
-        if self.comparator(self.chain[0], self.__generate_gen_dict()):
-            pass
-        else:
-            self.__revert_to_valid_block()
-        for i in range(0, len(self.chain)):
+        # if self.comparator(self.chain[0], Block(self.__generate_gen_dict())):
+        #     pass
+        # else:
+        #     self.__revert_to_valid_block()
+        for i in range(1, len(self.chain)):
             if self.validate_block(self.chain[i], self.chain[i - 1]):
                 pass
             else:
@@ -102,16 +103,16 @@ class Blockchain:
         cur_props = cur_block.get_properties()
         prev_props = prev_block.get_properties()
         # check index increment
-        if cur_props[2] != (prev_props[2] + 1):
+        if cur_props[1] != (prev_props[1] + 1):
             return False
         # check prev_hash equals hash of prev_block
-        elif cur_props[4] != prev_props[6]:
+        elif cur_props[3] != prev_props[7]:
             return False
         # check hash equals output of sha
-        elif cur_props[1] != Block.sha(cur_block._properties):
+        elif cur_props[7] != Block.sha(cur_block._properties):
             return False
         # check if block was proofed
-        elif cur_props[1][0:self.__difficulty] != '0' * self.__difficulty:
+        elif cur_props[1][0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
             return False
         else:
             return True
@@ -120,10 +121,10 @@ class Blockchain:
     def comparator(block_a, block_b):
         """ Compare values of two Blocks, return true if equal
         :type block_a: Block obj
-        :type block_b: dict
+        :type block_b: Block obj
         """
         a_props = block_a.get_properties()
-        b_props = block_b
+        b_props = block_b.get_properties()
         if len(a_props) != len(b_props):
             return False
         for i in range(0, len(a_props)):

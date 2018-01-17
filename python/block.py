@@ -28,7 +28,7 @@ class Block:
             self._properties[key] = value
         self._properties['hash'] = self.sha(self._properties)
         # store properties as immmutable
-        self.__properties = (self._properties['data'], self._properties['hash'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'])
+        self.__properties = (self._properties['data'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'], self._properties['hash'])
 
     def get_accepted_keys(self):
         """ Return list of accepted keys to use for initializing a Block """
