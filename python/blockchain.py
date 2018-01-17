@@ -9,7 +9,7 @@ class Blockchain:
     """ Defines the blockchain and its methods """
 
     def __init__(self):
-        self.__set_difficulty(10)
+        self.__set_difficulty(5)
         self.__genesis()
 
     def __genesis(self):
@@ -69,7 +69,7 @@ class Blockchain:
         prev_props = prev_block.get_properties()
         block = {
             'data': data,
-            'index': (prev_props[1] + 1),
+            'index': (prev_props[2] + 1),
             'nonce':0,
             'prev_hash': prev_props[6],
             'recipient': recipient,
@@ -120,10 +120,10 @@ class Blockchain:
     def comparator(block_a, block_b):
         """ Compare values of two Blocks, return true if equal
         :type block_a: Block obj
-        :type block_b: Block obj
+        :type block_b: dict
         """
         a_props = block_a.get_properties()
-        b_props = block_b.get_properties()
+        b_props = block_b
         if len(a_props) != len(b_props):
             return False
         for i in range(0, len(a_props)):
