@@ -18,7 +18,7 @@ class Block:
     def __set_accepted_keys(self):
         # accepted keys are stored as a tuple to avoid re-assignment
         # hash value will be generated in set_props
-        self.__accepted_keys = ('index', 'timestamp', 'data', 'prev_hash', 'sender', 'recipient', 'nonce')
+        self.__accepted_keys = ('data', 'index', 'nonce', 'prev_hash', 'recipient', 'sender', 'timestamp')
 
     def __set_properties(self, dictionary):
         self._properties = {}
@@ -28,7 +28,7 @@ class Block:
             self._properties[key] = value
         self._properties['hash'] = self.sha(self._properties)
         # store properties as immmutable
-        self.__properties = (self._properties['index'], self._properties['timestamp'], self._properties['data'], self._properties['hash'], self._properties['prev_hash'], self._properties['sender'], self._properties['recipient'], self._properties['nonce'])
+        self.__properties = (self._properties['data'], self._properties['hash'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'])
 
     def get_accepted_keys(self):
         """ Return list of accepted keys to use for initializing a Block """
@@ -56,6 +56,6 @@ class Block:
         :param properties: properties of a Block instance
         :type properties: dict
         """
-        cat = str(properties['index']) + str(properties['timestamp']) + str(properties['data']) + str(properties['prev_hash']) + str(properties['sender']) + str(properties['recipient']) + str(properties['nonce'])
+        cat = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
         hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed

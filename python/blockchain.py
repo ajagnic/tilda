@@ -9,7 +9,7 @@ class Blockchain:
     """ Defines the blockchain and its methods """
 
     def __init__(self):
-        self.__set_difficulty(4)
+        self.__set_difficulty(10)
         self.__genesis()
 
     def __genesis(self):
@@ -19,8 +19,9 @@ class Blockchain:
         genesis_block = Block(proofed_gen_dict)
         self.chain.append(genesis_block)
 
-    def __generate_gen_dict(self):
-        return {'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0}
+    @staticmethod
+    def __generate_gen_dict():
+        return {'data':{'language': 'python', 'code': """print('Genesis')"""}, 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}
 
     def __revert_to_valid_block(self):
         print("REVERTED")
@@ -55,22 +56,25 @@ class Blockchain:
     def add_new_block(self, data, sender, recipient):
         """ Add new block to chain, calculating hash and verifying
         :param data: data of new block
-        :type data: dict, str, int, arr
+        :type data: dict, str, int, list
         :param sender: origin of block data
         :type sender: str
         :param recipient: destination of block data
         :type recipient: str
         """
+        allowed = [str, int, list, dict]
+        if type(data) not in allowed:
+            return None
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
-            'index': (prev_props[0] + 1),
-            'timestamp': time.time(),
             'data': data,
-            'prev_hash': prev_props[3],
-            'sender': sender,
+            'index': (prev_props[1] + 1),
+            'nonce':0,
+            'prev_hash': prev_props[6],
             'recipient': recipient,
-            'nonce':0
+            'sender': sender,
+            'timestamp': time.time()
         }
         proofed_block = self.__proof_of_work(block)
         valid_block = Block(proofed_block)
@@ -80,20 +84,37 @@ class Blockchain:
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values
         """
+        if self.comparator(self.chain[0], self.__generate_gen_dict()):
+            pass
+        else:
+            self.__revert_to_valid_block()
         for i in range(0, len(self.chain)):
-            if i == 0:
-                if self.comparator(self.chain[0], self.__generate_gen_dict()):
-                    pass
-                else:
-                    self.__revert_to_valid_block()
-            elif i > 0 and i < len(self.chain):
-                if self.validate_block(self.chain[i], self.chain[i - 1]):
-                    pass
-                else:
-                    self.__revert_to_valid_block()
+            if self.validate_block(self.chain[i], self.chain[i - 1]):
+                pass
             else:
                 self.__revert_to_valid_block()
 
+    def validate_block(self, cur_block, prev_block):
+        """ Validate values of a block addition, return true if correct
+        :type cur_block: Block obj
+        :type prev_block: Block obj
+        """
+        cur_props = cur_block.get_properties()
+        prev_props = prev_block.get_properties()
+        # check index increment
+        if cur_props[2] != (prev_props[2] + 1):
+            return False
+        # check prev_hash equals hash of prev_block
+        elif cur_props[4] != prev_props[6]:
+            return False
+        # check hash equals output of sha
+        elif cur_props[1] != Block.sha(cur_block._properties):
+            return False
+        # check if block was proofed
+        elif cur_props[1][0:self.__difficulty] != '0' * self.__difficulty:
+            return False
+        else:
+            return True
 
     @staticmethod
     def comparator(block_a, block_b):
@@ -109,18 +130,3 @@ class Blockchain:
             if a_props[i] != b_props[i]:
                 return False
         return True
-
-    @staticmethod
-    def validate_block(cur_block, prev_block):
-        """ Validate values of a block addition, return true if correct
-        :type cur_block: Block obj
-        :type prev_block: Block obj
-        """
-        cur_props = cur_block.get_properties()
-        prev_props = prev_block.get_properties()
-        if cur_props[0] != (prev_props[0] + 1):
-            return False
-        elif cur_props[3] != prev_props[6]:
-            return False
-        else:
-            return True
