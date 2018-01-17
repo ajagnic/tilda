@@ -22,8 +22,7 @@ class Block:
 
     def __set_properties(self, dictionary):
         self._properties = {}
-        valid = self.verify_dict(dictionary)
-        if valid is False:
+        if self.verify_dict(dictionary) is False:
             return None
         for key, value in dictionary.items():
             self._properties[key] = value
