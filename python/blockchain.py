@@ -15,9 +15,12 @@ class Blockchain:
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
         self.chain = []
-        proofed_gen_dict = self.__proof_of_work({'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0})
+        proofed_gen_dict = self.__proof_of_work(self.__generate_gen_dict())
         genesis_block = Block(proofed_gen_dict)
         self.chain.append(genesis_block)
+
+    def __generate_gen_dict(self):
+        return {'index':0, 'timestamp':time.time(), 'data':{'language': 'python', 'code': """print('Genesis')"""}, 'prev_hash':0, 'sender':0, 'recipient':0, 'nonce':0}
 
     def __revert_to_valid_block(self):
         print("REVERTED")
@@ -79,17 +82,17 @@ class Blockchain:
         """
         for i in range(0, len(self.chain)):
             if i == 0:
-                # generate genesis block NOTE TODO
-                # if self.comparator(self.chain[i], temp_genesis_block):
-                #   pass
-                # else:
-                #   return False
-            else:
-                if self.validate_block(self.chain[i], self.chain[i - 1]):
-                    return True
+                if self.comparator(self.chain[0], self.__generate_gen_dict()):
+                    pass
                 else:
                     self.__revert_to_valid_block()
-                    return False
+            elif i > 0 and i < len(self.chain):
+                if self.validate_block(self.chain[i], self.chain[i - 1]):
+                    pass
+                else:
+                    self.__revert_to_valid_block()
+            else:
+                self.__revert_to_valid_block()
 
 
     @staticmethod
