@@ -20,8 +20,7 @@ class Blockchain:
         genesis_block = Block(proofed_gen_dict)
         self.chain.append(genesis_block)
 
-    @staticmethod
-    def __generate_gen_dict():
+    def __generate_gen_dict(self):
         return {'data':{'language': 'python', 'code': """print('Genesis')"""}, 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}
 
     def __revert_to_valid_block(self):
