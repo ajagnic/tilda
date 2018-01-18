@@ -15,6 +15,9 @@ class Block:
         self.__set_accepted_keys()
         self.__set_properties(dictionary)
 
+    def __repr__(self):
+        return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
+
     def __set_accepted_keys(self):
         # accepted keys are stored as a tuple to avoid re-assignment
         # hash value will be generated in set_props

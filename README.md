@@ -10,14 +10,13 @@ Adrian Agnic
   * ```commandline
     cd tilde/python/
     ```
-  * ```commandline
-    python
-    ```
+  * Enter Python3 interpreter:
+    * ```commandline
+      python
+      ```
   * ```commandline
     from blockchain import Blockchain
     bc = Blockchain()
     bc.add_new_block('Hello World', 'me', 'you')
-    last_block = bc.get_latest_block()
-    last_block_info = last_block.get_properties()
-    certain_info = bc.chain[3].get_properties()
+    bc.chain
     ```
