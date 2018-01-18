@@ -107,8 +107,7 @@ class Blockchain:
                 self.__revert_to_valid_block()
                 print('Invalid hash or nonce found')
                 return False
-            else:
-                return True
+        return True
 
     def __validate_blocks_hash(self, properties):
         """ validate_chain helper """
