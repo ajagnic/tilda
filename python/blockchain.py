@@ -82,7 +82,8 @@ class Blockchain:
         proofed_block = self.__proof_of_work(block)
         valid_block = Block(proofed_block)
         self.chain.append(valid_block)
-        self.validate_chain()
+        if self.validate_chain():
+            return True
 
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
@@ -92,14 +93,17 @@ class Blockchain:
             # check index increment
             if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
+                return False
             # check prev_hash == prev_block.hash
             elif props['prev_hash'] != prev_props['hash']:
                 self.__revert_to_valid_block()
+                return False
             # check hash == sha(Block data)
-            elif self.__validate_blocks_hash(props) is False:
+            elif self.__validate_blocks_hash(props) is False:# BUG
                 self.__revert_to_valid_block()
+                return False
             else:
-                return None
+                return True
 
     def __validate_blocks_hash(self, properties):
         """ validate_chain helper """
@@ -107,7 +111,7 @@ class Blockchain:
         del props_copy['hash']
         hashed = Block.sha(props_copy)
         if properties['hash'] == hashed:
-            if hashed[0:self.__difficulty] != '0' * self.__difficulty:
+            if hashed[0:self.__difficulty[0]] == '0' * self.__difficulty[0]:
                 return True
             else:
                 return False
