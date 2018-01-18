@@ -20,3 +20,5 @@ Adrian Agnic
     bc.add_new_block('Hello World', 'me', 'you')
     bc.chain
     ```
+##### Known Bugs:
+* Mutable 'hash' value can be changed and passes validation

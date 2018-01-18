@@ -86,9 +86,12 @@ class Blockchain:
 
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
-        for i in range(1, len(self.chain)):
-            props = self.chain[i]._properties
-            prev_props = self.chain[i - 1]._properties
+        for i in range(1, len(self.chain)):# BUG
+            print(i)
+            props = copy.deepcopy(self.chain[i]._properties)
+            prev_props = copy.deepcopy(self.chain[i - 1]._properties)
+            # print(props['prev_hash'])
+            # print(prev_props['hash'])
             # check index increment
             if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
