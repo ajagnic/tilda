@@ -92,14 +92,17 @@ class Blockchain:
             # check index increment
             if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
+                print('Invalid index found')
                 return False
             # check prev_hash == prev_block.hash
             elif props['prev_hash'] != prev_props['hash']:
                 self.__revert_to_valid_block()
+                print('Invalid previous hash found')
                 return False
             # check hash == sha(Block data)
             elif self.__validate_blocks_hash(props) is False:# BUG
                 self.__revert_to_valid_block()
+                print('Invalid hash or nonce found')
                 return False
             else:
                 return True
