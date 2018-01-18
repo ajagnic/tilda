@@ -1,5 +1,6 @@
 """ Contains blockchain class structure """
 import time
+import copy
 from block import Block
 
 __version__ = '0.0.1'
@@ -65,12 +66,13 @@ class Blockchain:
         allowed = [str, int, list, dict]
         if type(data) not in allowed:
             return None
+        elif type(sender) and type(recipient) != str:
+            return None
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
-        print(prev_props)
         block = {
             'data': data,
-            'index': (prev_props[2] + 1),
+            'index': (prev_props[1] + 1),
             'nonce':0,
             'prev_hash': prev_props[7],
             'recipient': recipient,
@@ -83,51 +85,31 @@ class Blockchain:
         self.validate_chain()
 
     def validate_chain(self):
-        """ Loop through chain, verifying index, hash, and previous hash values
-        """
-        # if self.comparator(self.chain[0], Block(self.__generate_gen_dict())):
-        #     pass
-        # else:
-        #     self.__revert_to_valid_block()
+        """ Loop through chain, verifying index, hash, and previous hash values """
         for i in range(1, len(self.chain)):
-            if self.validate_block(self.chain[i], self.chain[i - 1]):
-                pass
-            else:
+            props = self.chain[i]._properties
+            prev_props = self.chain[i - 1]._properties
+            # check index increment
+            if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
+            # check prev_hash == prev_block.hash
+            elif props['prev_hash'] != prev_props['hash']:
+                self.__revert_to_valid_block()
+            # check hash == sha(Block data)
+            elif self.__validate_blocks_hash(props) is False:
+                self.__revert_to_valid_block()
+            else:
+                return None
 
-    def validate_block(self, cur_block, prev_block):
-        """ Validate values of a block addition, return true if correct
-        :type cur_block: Block obj
-        :type prev_block: Block obj
-        """
-        cur_props = cur_block.get_properties()
-        prev_props = prev_block.get_properties()
-        # check index increment
-        if cur_props[1] != (prev_props[1] + 1):
-            return False
-        # check prev_hash equals hash of prev_block
-        elif cur_props[3] != prev_props[7]:
-            return False
-        # check hash equals output of sha
-        elif cur_props[7] != Block.sha(cur_block._properties):
-            return False
-        # check if block was proofed
-        elif cur_props[1][0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
-            return False
-        else:
-            return True
-
-    @staticmethod
-    def comparator(block_a, block_b):
-        """ Compare values of two Blocks, return true if equal
-        :type block_a: Block obj
-        :type block_b: Block obj
-        """
-        a_props = block_a.get_properties()
-        b_props = block_b.get_properties()
-        if len(a_props) != len(b_props):
-            return False
-        for i in range(0, len(a_props)):
-            if a_props[i] != b_props[i]:
+    def __validate_blocks_hash(self, properties):
+        """ validate_chain helper """
+        props_copy = copy.deepcopy(properties)
+        del props_copy['hash']
+        hashed = Block.sha(props_copy)
+        if properties['hash'] == hashed:
+            if hashed[0:self.__difficulty] != '0' * self.__difficulty:
+                return True
+            else:
                 return False
-        return True
+        else:
+            return False
