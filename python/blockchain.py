@@ -89,27 +89,43 @@ class Blockchain:
         for i in range(1, len(self.chain)):
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
-            # check index increment
-            if props['index'] != (prev_props['index'] + 1):
+            # check types
+            if self.__validate_types(props) is False:
                 self.__revert_to_valid_block()
-                print('Invalid index found')
+                print('Invalid data type')
+                return False
+            # check index increment
+            elif props['index'] != (prev_props['index'] + 1):
+                self.__revert_to_valid_block()
+                print('Invalid index')
                 return False
             # check prev_hash == prev_block.hash
             elif props['prev_hash'] != prev_props['hash']:
                 self.__revert_to_valid_block()
-                print('Invalid previous hash found')
+                print('Invalid previous hash')
                 return False
-            # check hash == sha(Block data)
+            # check hash == sha(Block data) MAIN CHECK
             elif self.__validate_blocks_hash(props) is False:
                 self.__revert_to_valid_block()
-                print('Invalid hash or nonce found')
+                print('Invalid hash or nonce')
                 return False
-            # check time has progressed from last Block
+            # check timestamp
             elif props['timestamp'] <= prev_props['timestamp']:
                 self.__revert_to_valid_block()
-                print('Invalid timestamp found')
+                print('Invalid timestamp')
+                return False
+            elif self.__hard_hash_check(self.chain[i].get_properties(), self.chain[i-1].get_properties()) is False:
+                self.__revert_to_valid_block()
+                print('Invalid hash')
                 return False
         return True
+
+    def __hard_hash_check(self, set_props, prev_set_props):
+        """  """
+        if set_props[3] == prev_set_props[7]:
+            return True
+        else:
+            return False
 
     def __validate_blocks_hash(self, properties):
         """ validate_chain helper """
@@ -123,3 +139,13 @@ class Blockchain:
                 return False
         else:
             return False
+
+    def __validate_types(self, properties):
+        """ validate_chain helper """
+        types = [str, int, list, dict]
+        if type(properties['data']) in types:
+            if type(properties['timestamp']) == float:
+                if type(properties['nonce']) and type(properties['index']) == int:
+                    if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) == str:
+                        return True
+        return False
