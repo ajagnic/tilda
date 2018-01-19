@@ -122,10 +122,11 @@ class Blockchain:
 
     def __hard_hash_check(self, set_props, prev_set_props):
         """  """
-        if set_props[3] == prev_set_props[7]:
-            return True
-        else:
-            return False
+        if len(set_props) == len(prev_set_props):
+            if set_props[3] == prev_set_props[7]:
+                return True
+            else:
+                return False
 
     def __validate_blocks_hash(self, properties):
         """ validate_chain helper """
