@@ -82,7 +82,7 @@ class Blockchain:
         valid_block = Block(proofed_block)
         self.chain.append(valid_block)
         if self.validate_chain():
-            return valid_block._properties['hash']
+            return (valid_block._properties['hash'], True)
 
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
@@ -103,6 +103,11 @@ class Blockchain:
             elif self.__validate_blocks_hash(props) is False:
                 self.__revert_to_valid_block()
                 print('Invalid hash or nonce found')
+                return False
+            # check time has progressed from last Block
+            elif props['timestamp'] <= prev_props['timestamp']:
+                self.__revert_to_valid_block()
+                print('Invalid timestamp found')
                 return False
         return True
 
