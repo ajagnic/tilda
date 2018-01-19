@@ -21,7 +21,7 @@ class Blockchain:
         self.chain.append(genesis_block)
 
     def __generate_gen_dict(self):
-        return {'data':{'language': 'python', 'code': """print('Genesis')"""}, 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}
+        return {'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}
 
     def __revert_to_valid_block(self):
         print("REVERTED")
@@ -64,9 +64,9 @@ class Blockchain:
         """
         allowed = [str, int, list, dict]
         if type(data) not in allowed:
-            return None
+            return False
         elif type(sender) and type(recipient) != str:
-            return None
+            return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
@@ -78,20 +78,17 @@ class Blockchain:
             'sender': sender,
             'timestamp': time.time()
         }
-        proofed_block = self.__proof_of_work(block)
+        proofed_block = self.__proof_of_work(copy.deepcopy(block))
         valid_block = Block(proofed_block)
         self.chain.append(valid_block)
         if self.validate_chain():
-            return True
+            return valid_block._properties['hash']
 
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
-        for i in range(1, len(self.chain)):# BUG
-            print(i)
+        for i in range(1, len(self.chain)):
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
-            # print(props['prev_hash'])
-            # print(prev_props['hash'])
             # check index increment
             if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
@@ -103,7 +100,7 @@ class Blockchain:
                 print('Invalid previous hash found')
                 return False
             # check hash == sha(Block data)
-            elif self.__validate_blocks_hash(props) is False:# BUG
+            elif self.__validate_blocks_hash(props) is False:
                 self.__revert_to_valid_block()
                 print('Invalid hash or nonce found')
                 return False
