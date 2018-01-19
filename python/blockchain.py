@@ -110,7 +110,7 @@ class Blockchain:
                 print('Invalid hash or nonce')
                 return False
             # check timestamp
-            elif props['timestamp'] <= prev_props['timestamp']:
+            elif props['timestamp'] < prev_props['timestamp']:
                 self.__revert_to_valid_block()
                 print('Invalid timestamp')
                 return False
