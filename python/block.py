@@ -1,7 +1,7 @@
 """ Contains class structure of a single block """
 import hashlib
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __author__ = 'Adrian Agnic'
 
 class Block:
@@ -13,7 +13,8 @@ class Block:
         :type dictionary: dict
         """
         self.__set_accepted_keys()
-        self.__set_properties(dictionary)
+        if type(dictionary) == dict:
+            self.__set_properties(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
@@ -45,13 +46,14 @@ class Block:
         pass
 
     def verify_dict(self, dictionary):
-        if len(dictionary) == len(self.get_accepted_keys()):
-            for key, value in dictionary.items():
-                if key in self.get_accepted_keys():
-                    pass
-                else:
-                    return False
-            return True
+        if type(dictionary) == dict:
+            if len(dictionary) == len(self.get_accepted_keys()):
+                for key, value in dictionary.items():
+                    if key in self.get_accepted_keys():
+                        pass
+                    else:
+                        return False
+                return True
 
     @staticmethod
     def sha(properties):

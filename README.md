@@ -20,3 +20,8 @@ Adrian Agnic
     bc.add_new_block('Hello World', 'me', 'you')
     bc.chain
     ```
+
+#### TODO:
+* CLI
+* Dockerfile
+* p2p

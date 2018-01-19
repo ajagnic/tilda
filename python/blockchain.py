@@ -3,14 +3,14 @@ import time
 import copy
 from block import Block
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __author__ = 'Adrian Agnic'
 
 class Blockchain:
     """ Defines the blockchain and its methods """
 
-    def __init__(self, difficulty):
-        self.__set_difficulty(difficulty)
+    def __init__(self):
+        self.__set_difficulty(5)
         self.__genesis()
 
     def __genesis(self):
