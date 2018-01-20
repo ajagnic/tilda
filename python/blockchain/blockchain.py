@@ -15,7 +15,7 @@ class Blockchain:
 
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
-        self.chain: list = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}))]
+        self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}))]
 
     def __revert_to_valid_block(self):
         print('REVERTED')
@@ -35,7 +35,7 @@ class Blockchain:
     def __set_difficulty(self):
         """ Create immutable property of blockchain POW difficulty
         """
-        self.__difficulty: tuple = (5,)
+        self.__difficulty = (5,)
 
     def _save_local(self):
         """ Locally store blockchain as file """
@@ -68,16 +68,16 @@ class Blockchain:
             'timestamp': time.time()
         }
         self.chain.append(Block(self.__proof_of_work(copy.deepcopy(block))))
-        res: [tuple, bool] = self.validate_chain()
+        res = self.validate_chain()
         if res[0] is True:
             return (True, self.chain[len(self.chain)-1]._properties['hash'])
         return res
 
-    def validate_chain(self):
+    def validate_chain(self):# NOTE TODO VALIDATE chain[0]
         """ Loop through chain, verifying index, hash, and previous hash values """
         for i in range(1, len(self.chain)):
-            props: dict = copy.deepcopy(self.chain[i]._properties)
-            prev_props: dict = copy.deepcopy(self.chain[i - 1]._properties)
+            props = copy.deepcopy(self.chain[i]._properties)
+            prev_props = copy.deepcopy(self.chain[i - 1]._properties)
             # check types
             if self.__validate_types(props) is False:
                 self.__revert_to_valid_block()
@@ -90,14 +90,10 @@ class Blockchain:
             elif props['prev_hash'] != prev_props['hash']:
                 self.__revert_to_valid_block()
                 return (False, 'Invalid previous hash')
-            # check hash == sha(Block data) MAIN CHECK
+            # check hash == sha(Block data)
             elif self.__validate_blocks_hash(props) is False:
                 self.__revert_to_valid_block()
                 return (False, 'Invalid hash or nonce')
-            # check timestamp
-            elif props['timestamp'] < prev_props['timestamp']:
-                self.__revert_to_valid_block()
-                return (False, 'Invalid timestamp')
             # check immutable hash values
             elif self.__hard_hash_check(self.chain[i].get_properties(), self.chain[i-1].get_properties()) is False:
                 self.__revert_to_valid_block()
@@ -114,7 +110,7 @@ class Blockchain:
 
     def __validate_blocks_hash(self, properties):
         """ validate_chain helper: check contents = hash and proof of work used """
-        props_copy: dict = copy.deepcopy(properties)
+        props_copy = copy.deepcopy(properties)
         del props_copy['hash']
         hashed = Block.sha(props_copy)
         if properties['hash'] == hashed:
@@ -132,10 +128,3 @@ class Blockchain:
                         if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) is str:
                             return True
         return False
-
-if __name__ == '__main__':
-    bc = Blockchain()
-    print(bc.chain)
-    for i in range(0, 4):
-        bc.add_new_block('hello', 'm', 'n')
-    print(bc.chain)

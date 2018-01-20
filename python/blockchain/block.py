@@ -13,7 +13,7 @@ class Block:
         :type dictionary: dict
         """
         self.__set_accepted_keys()
-        if type(dictionary) is dict: self.__set_properties(dictionary)
+        self.__set_properties(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
@@ -26,7 +26,7 @@ class Block:
     def __set_properties(self, dictionary):
         if self.verify_dict(dictionary) is False: return None
         self._properties = {key: value for key, value in dictionary.items()}
-        self._properties['hash']: str = self.sha(self._properties)
+        self._properties['hash'] = self.sha(self._properties)
         # store properties as immmutable
         self.__properties = (self._properties['data'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'], self._properties['hash'])
 
@@ -52,5 +52,5 @@ class Block:
         :type properties: dict
         """
         cat = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
-        hashed: str = hashlib.sha256(cat.encode()).hexdigest()
+        hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
