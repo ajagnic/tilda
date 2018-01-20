@@ -26,7 +26,7 @@ class Blockchain:
         :param dictionary: Block properties
         :type dictionary: dict
         """
-        hashed: str = Block.sha(dictionary)
+        hashed = Block.sha(dictionary)
         while hashed[0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
             dictionary['nonce'] += 1
             hashed = Block.sha(dictionary)
@@ -56,8 +56,8 @@ class Blockchain:
         """
         if type(data) not in [str, int, list, dict]: return False
         if type(sender) and type(recipient) is not str: return False
-        prev_block: object = self.get_latest_block()
-        prev_props: tuple = prev_block.get_properties()
+        prev_block = self.get_latest_block()
+        prev_props = prev_block.get_properties()
         block = {
             'data': data,
             'index': (prev_props[1] + 1),
@@ -116,7 +116,7 @@ class Blockchain:
         """ validate_chain helper: check contents = hash and proof of work used """
         props_copy: dict = copy.deepcopy(properties)
         del props_copy['hash']
-        hashed: str = Block.sha(props_copy)
+        hashed = Block.sha(props_copy)
         if properties['hash'] == hashed:
             if hashed[0:self.__difficulty[0]] == '0' * self.__difficulty[0]:
                 return True
@@ -139,4 +139,3 @@ if __name__ == '__main__':
     for i in range(0, 4):
         bc.add_new_block('hello', 'm', 'n')
     print(bc.chain)
-

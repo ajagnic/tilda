@@ -25,7 +25,7 @@ class Block:
 
     def __set_properties(self, dictionary):
         if self.verify_dict(dictionary) is False: return None
-        self._properties: dict = {key: value for key, value in dictionary.items()}
+        self._properties = {key: value for key, value in dictionary.items()}
         self._properties['hash']: str = self.sha(self._properties)
         # store properties as immmutable
         self.__properties = (self._properties['data'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'], self._properties['hash'])
@@ -51,6 +51,6 @@ class Block:
         :param properties: properties of a Block instance
         :type properties: dict
         """
-        cat: str = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
+        cat = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
         hashed: str = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
