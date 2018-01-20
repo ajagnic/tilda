@@ -13,8 +13,7 @@ class Block:
         :type dictionary: dict
         """
         self.__set_accepted_keys()
-        if type(dictionary) == dict:
-            self.__set_properties(dictionary)
+        if type(dictionary) is dict: self.__set_properties(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
@@ -25,12 +24,9 @@ class Block:
         self.__accepted_keys = ('data', 'index', 'nonce', 'prev_hash', 'recipient', 'sender', 'timestamp')
 
     def __set_properties(self, dictionary):
-        self._properties = {}
-        if self.verify_dict(dictionary) is False:
-            return None
-        for key, value in dictionary.items():
-            self._properties[key] = value
-        self._properties['hash'] = self.sha(self._properties)
+        if self.verify_dict(dictionary) is False: return None
+        self._properties: dict = {key: value for key, value in dictionary.items()}
+        self._properties['hash']: str = self.sha(self._properties)
         # store properties as immmutable
         self.__properties = (self._properties['data'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['recipient'], self._properties['sender'], self._properties['timestamp'], self._properties['hash'])
 
@@ -42,18 +38,12 @@ class Block:
         """ Returns tuple of Block instance property values """
         return self.__properties
 
-    def load_program(self):
-        pass
-
     def verify_dict(self, dictionary):
-        if type(dictionary) == dict:
-            if len(dictionary) == len(self.get_accepted_keys()):
-                for key, value in dictionary.items():
-                    if key in self.get_accepted_keys():
-                        pass
-                    else:
-                        return False
-                return True
+        if len(dictionary) == len(self.get_accepted_keys()):
+            for key, value in dictionary.items():
+                if key in self.get_accepted_keys(): return True
+                return False
+        return False
 
     @staticmethod
     def sha(properties):
@@ -61,6 +51,6 @@ class Block:
         :param properties: properties of a Block instance
         :type properties: dict
         """
-        cat = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
-        hashed = hashlib.sha256(cat.encode()).hexdigest()
+        cat: str = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['recipient']) + str(properties['sender']) + str(properties['timestamp'])
+        hashed: str = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
