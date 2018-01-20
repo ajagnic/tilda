@@ -1,7 +1,7 @@
 """ Contains blockchain class structure, properties and methods are terribly abstracted """
 import time
 import copy
-from block import Block
+from blockchain.block import Block
 
 __version__ = '0.0.2'
 __author__ = 'Adrian Agnic'
@@ -23,9 +23,11 @@ class Blockchain:
     def __generate_gen_dict(self):
         return {'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}
 
-    def __revert_to_valid_block(self, invalid_block):
-        for i in range(0, invalid_block['index']):
-            pass
+    def __revert_to_valid_block(self):
+        print('REVERTED')
+        self.__genesis()
+        # for i in range(0, len(self.chain)):
+        #     pass
 
     def __proof_of_work(self, dictionary):
         """ Calculate a nonce value that results in a Block hash with an amount of leading zeros equal to difficulty
@@ -81,7 +83,7 @@ class Blockchain:
         proofed_block = self.__proof_of_work(copy.deepcopy(block))
         valid_block = Block(proofed_block)
         self.chain.append(valid_block)
-        if self.validate_chain():
+        if self.validate_chain() is True:
             return (True, valid_block._properties['hash'])
 
     def validate_chain(self):
@@ -91,27 +93,27 @@ class Blockchain:
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
             # check types
             if self.__validate_types(props) is False:
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid data type')
             # check index increment
             elif props['index'] != (prev_props['index'] + 1):
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid index')
             # check prev_hash == prev_block.hash
             elif props['prev_hash'] != prev_props['hash']:
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid previous hash')
             # check hash == sha(Block data) MAIN CHECK
             elif self.__validate_blocks_hash(props) is False:
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid hash or nonce')
             # check timestamp
             elif props['timestamp'] < prev_props['timestamp']:
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid timestamp')
             # check immutable hash values
             elif self.__hard_hash_check(self.chain[i].get_properties(), self.chain[i-1].get_properties()) is False:
-                self.__revert_to_valid_block(props)
+                self.__revert_to_valid_block()
                 return (False, 'Invalid hash')
         return True
 
@@ -141,9 +143,10 @@ class Blockchain:
     def __validate_types(self, properties):
         """ validate_chain helper: check data types of Block """
         types = [str, int, list, dict]
-        if type(properties['data']) in types:
-            if type(properties['timestamp']) == float:
-                if type(properties['nonce']) and type(properties['index']) == int:
-                    if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) == str:
-                        return True
+        if len(properties) == 8:
+            if type(properties['data']) in types:
+                if type(properties['timestamp']) == float:
+                    if type(properties['nonce']) and type(properties['index']) == int:
+                        if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) == str:
+                            return True
         return False

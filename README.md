@@ -15,13 +15,14 @@ Adrian Agnic
       python
       ```
   * ```commandline
-    from blockchain import Blockchain
+    from blockchain.blockchain import Blockchain
     bc = Blockchain()
     bc.add_new_block('Hello World', 'me', 'you')
     bc.chain
     ```
 
 #### TODO:
+* check validate on possible Block re-assignments
 * unittests
 * CLI
 * Dockerfile
