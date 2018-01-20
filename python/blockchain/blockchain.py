@@ -83,7 +83,7 @@ class Blockchain:
         proofed_block = self.__proof_of_work(copy.deepcopy(block))
         valid_block = Block(proofed_block)
         self.chain.append(valid_block)
-        if self.validate_chain() is True:
+        if self.validate_chain() is True:# BUG, CHECK RES[0]
             return (True, valid_block._properties['hash'])
 
     def validate_chain(self):
