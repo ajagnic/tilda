@@ -41,7 +41,8 @@ class Block:
     def verify_dict(self, dictionary):
         if len(dictionary) == len(self.get_accepted_keys()):
             for key, value in dictionary.items():
-                if key in self.get_accepted_keys(): return True
+                if key in self.get_accepted_keys():
+                    return True
                 return False
         return False
 
