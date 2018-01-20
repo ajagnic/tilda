@@ -13,7 +13,7 @@ class Block:
         :type dictionary: dict
         """
         self.__set_accepted_keys()
-        self.__set_properties(dictionary)
+        if type(dictionary) is dict: self.__set_properties(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
