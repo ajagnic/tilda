@@ -26,4 +26,4 @@ Adrian Agnic
 * unittests
 * CLI
 * Dockerfile
-* p2p
+* dev server
