@@ -11,9 +11,9 @@ Adrian Agnic
     cd tilde/python/
     ```
   * Enter Python3 interpreter:
-    * ```commandline
-      python
-      ```
+    ```commandline
+    python
+    ```
   * ```commandline
     from blockchain.blockchain import Blockchain
     bc = Blockchain()
