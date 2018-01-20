@@ -22,7 +22,7 @@ Adrian Agnic
     ```
 
 #### TODO:
-* check validate on possible Block re-assignments
+* validate chain[0], sanitize inputs
 * unittests
 * CLI
 * Dockerfile
