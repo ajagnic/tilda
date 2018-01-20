@@ -22,6 +22,7 @@ Adrian Agnic
     ```
 
 #### TODO:
+* unittests
 * CLI
 * Dockerfile
 * p2p
