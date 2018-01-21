@@ -14,6 +14,7 @@ class Blockchain:
     def __init__(self):
         self.__set_difficulty(6)
         self.__genesis()
+        self._save_local()
 
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
@@ -51,8 +52,8 @@ class Blockchain:
             os.mkdir('.chaindata')
             new_doc = open('.chaindata/.data.txt', 'w')
             for i in range(0, len(self.chain)):
-                doc.write(json.dumps(self.chain[i]._properties))
-            doc.close()
+                new_doc.write(json.dumps(self.chain[i]._properties))
+            new_doc.close()
 
     def _load_local(self):
         pass
