@@ -90,8 +90,10 @@ class Blockchain:
             return (True, self.chain[len(self.chain)-1]._properties['hash'])
         return res
 
-    def validate_chain(self):# NOTE TODO VALIDATE chain[0]
+    def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
+        res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
+        if res is False: return (False,)
         for i in range(1, len(self.chain)):
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
@@ -122,7 +124,6 @@ class Blockchain:
         if len(set_props) == len(prev_set_props):
             if set_props[3] == prev_set_props[7]:
                 return True
-            return False
         return False
 
     def __validate_blocks_hash(self, properties):
@@ -133,7 +134,6 @@ class Blockchain:
         if properties['hash'] == hashed:
             if hashed[0:self.__difficulty[0]] == '0' * self.__difficulty[0]:
                 return True
-            return False
         return False
 
     def __validate_types(self, properties):
@@ -143,5 +143,17 @@ class Blockchain:
                 if type(properties['timestamp']) is float:
                     if type(properties['nonce']) and type(properties['index']) is int:
                         if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) is str:
+                            return True
+        return False
+
+    def __validate_gen(self, properties, set_hash):
+        if properties['index'] == 0:
+            if properties['data'] == 'Genesis':
+                if properties['prev_hash'] and properties['origin'] and properties['destination'] == 0:
+                    props_c = copy.deepcopy(properties)
+                    del props_c['hash']
+                    hashed = Block.sha(props_c)
+                    if properties['hash'] == hashed:
+                        if set_hash[7] == hashed:
                             return True
         return False
