@@ -39,11 +39,13 @@ class Block:
         return self.__properties
 
     def verify_dict(self, dictionary):
-        if len(dictionary) == len(self.get_accepted_keys()):
-            for key, value in dictionary.items():
-                if key in self.get_accepted_keys():
-                    return True
-                return False
+        if type(dictionary) is dict:
+            if len(dictionary) == len(self.get_accepted_keys()):
+                for key, value in dictionary.items():
+                    if key in self.get_accepted_keys():
+                        return True
+                    return False
+            return False
         return False
 
     @staticmethod

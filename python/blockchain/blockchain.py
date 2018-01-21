@@ -1,6 +1,8 @@
 """ Contains blockchain class structure, properties and methods are terribly abstracted """
 import time
 import copy
+import os
+import json
 from blockchain.block import Block
 
 __version__ = '0.0.2'
@@ -39,7 +41,21 @@ class Blockchain:
 
     def _save_local(self):
         """ Locally store blockchain as file """
-        pass # NOTE TODO
+        res = os.listdir()
+        if '.chaindata' in res:
+            doc = open('.chaindata/.data.txt', 'w')
+            for i in range(0, len(self.chain)):
+                doc.write(json.dumps(self.chain[i]._properties))
+            doc.close()
+        else:
+            os.mkdir('.chaindata')
+            new_doc = open('.chaindata/.data.txt', 'w')
+            for i in range(0, len(self.chain)):
+                doc.write(json.dumps(self.chain[i]._properties))
+            doc.close()
+
+    def _load_local(self):
+        pass
 
     def get_latest_block(self):
         """ Returns last Block obj in chain """
