@@ -14,7 +14,6 @@ class Blockchain:
     def __init__(self):
         self.__set_difficulty(5)
         self.__genesis()
-        self._save_local()
 
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
