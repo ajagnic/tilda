@@ -10,12 +10,12 @@ class Blockchain:
     """ Defines the blockchain and its methods """
 
     def __init__(self):
-        self.__set_difficulty()
+        self.__set_difficulty(6)
         self.__genesis()
 
     def __genesis(self):
         """ Initialize the blockchain with the only valid first block """
-        self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'recipient':0, 'sender':0, 'timestamp':time.time()}))]
+        self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'destination':0, 'origin':0, 'timestamp':time.time()}))]
 
     def __revert_to_valid_block(self):
         print('REVERTED')
@@ -32,10 +32,10 @@ class Blockchain:
             hashed = Block.sha(dictionary)
         return dictionary
 
-    def __set_difficulty(self):
+    def __set_difficulty(self, num):
         """ Create immutable property of blockchain POW difficulty
         """
-        self.__difficulty = (5,)
+        self.__difficulty = (num,)
 
     def _save_local(self):
         """ Locally store blockchain as file """
@@ -45,17 +45,17 @@ class Blockchain:
         """ Returns last Block obj in chain """
         return self.chain[(len(self.chain) - 1)]
 
-    def add_new_block(self, data, sender, recipient):
+    def add_new_block(self, data, origin, destination):
         """ Add new block to chain, calculating hash and verifying
         :param data: data of new block
         :type data: dict, str, int, list
-        :param sender: origin of block data
-        :type sender: str
-        :param recipient: destination of block data
-        :type recipient: str
+        :param origin: origin of block data
+        :type origin: str
+        :param destination: destination of block data
+        :type destination: str
         """
         if type(data) not in [str, int, list, dict]: return False
-        if type(sender) and type(recipient) is not str: return False
+        if type(origin) and type(destination) is not str: return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
@@ -63,8 +63,8 @@ class Blockchain:
             'index': (prev_props[1] + 1),
             'nonce':0,
             'prev_hash': prev_props[7],
-            'recipient': recipient,
-            'sender': sender,
+            'destination': destination,
+            'origin': origin,
             'timestamp': time.time()
         }
         self.chain.append(Block(self.__proof_of_work(copy.deepcopy(block))))
