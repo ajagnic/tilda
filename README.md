@@ -22,6 +22,7 @@ Adrian Agnic
   ```
 
 #### TODO:
+* refactor variable/method names and access
 * unittests
 * CLI
 * Dockerfile
