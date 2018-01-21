@@ -44,8 +44,6 @@ class Block:
                 for key, value in dictionary.items():
                     if key in self.get_accepted_keys():
                         return True
-                    return False
-            return False
         return False
 
     @staticmethod

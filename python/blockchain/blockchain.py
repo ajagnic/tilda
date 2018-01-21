@@ -12,7 +12,7 @@ class Blockchain:
     """ Defines the blockchain and its methods """
 
     def __init__(self):
-        self.__set_difficulty(6)
+        self.__set_difficulty(5)
         self.__genesis()
         self._save_local()
 
@@ -40,7 +40,7 @@ class Blockchain:
         """
         self.__difficulty = (num,)
 
-    def _save_local(self):
+    def _save_local(self):# NOTE ADD DELIMITER TO SEP OBJ'S
         """ Locally store blockchain as file """
         res = os.listdir()
         if '.chaindata' in res:
@@ -93,8 +93,11 @@ class Blockchain:
     def validate_chain(self):
         """ Loop through chain, verifying index, hash, and previous hash values """
         res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
-        if res is False: return (False,)
+        if res is False:
+            self.__revert_to_valid_block()
+            return (False, 'Invalid genesis')
         for i in range(1, len(self.chain)):
+            print(i)
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
             # check types
@@ -126,7 +129,7 @@ class Blockchain:
                 return True
         return False
 
-    def __validate_blocks_hash(self, properties):
+    def __validate_blocks_hash(self, properties):#NOTE TODO REFACTOR FOR BOTH _props & __props
         """ validate_chain helper: check contents = hash and proof of work used """
         props_copy = copy.deepcopy(properties)
         del props_copy['hash']
@@ -142,18 +145,20 @@ class Blockchain:
             if type(properties['data']) in [str, int, list, dict]:
                 if type(properties['timestamp']) is float:
                     if type(properties['nonce']) and type(properties['index']) is int:
-                        if type(properties['prev_hash']) and type(properties['hash']) and type(properties['recipient']) and type(properties['sender']) is str:
+                        if type(properties['prev_hash']) and type(properties['hash']) and type(properties['destination']) and type(properties['origin']) is str:
                             return True
         return False
 
     def __validate_gen(self, properties, set_hash):
         if properties['index'] == 0:
             if properties['data'] == 'Genesis':
-                if properties['prev_hash'] and properties['origin'] and properties['destination'] == 0:
-                    props_c = copy.deepcopy(properties)
-                    del props_c['hash']
-                    hashed = Block.sha(props_c)
-                    if properties['hash'] == hashed:
-                        if set_hash[7] == hashed:
-                            return True
+                if properties['prev_hash'] == 0:
+                    if properties['origin'] == 0:
+                        if properties['destination'] == 0:
+                            props_c = copy.deepcopy(properties)
+                            del props_c['hash']
+                            hashed = Block.sha(props_c)
+                            if properties['hash'] == hashed:
+                                if set_hash[7] == hashed:
+                                    return True
         return False
