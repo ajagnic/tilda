@@ -140,10 +140,10 @@ class Blockchain:
     def __validate_types(self, properties):
         """ validate_chain helper: check data types of Block """
         if len(properties) == 8:
-            if type(properties['data']) in [str, int, list, dict]:
-                if type(properties['timestamp']) is float:
-                    if type(properties['nonce']) and type(properties['index']) is int:
-                        if type(properties['prev_hash']) and type(properties['hash']) and type(properties['destination']) and type(properties['origin']) is str:
+            if isinstance(properties['timestamp'], float):
+                if all(isinstance(properties['data'], k) for k in [str, int, list, dict]):
+                    if all(isinstance(j, int) for j in [properties['nonce'], properties['index']]):
+                        if all(isinstance(i, str) for i in [properties['prev_hash'], properties['hash'], properties['destination'], properties['origin']]):
                             return True
         return False
 
