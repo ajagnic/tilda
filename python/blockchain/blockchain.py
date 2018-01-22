@@ -39,7 +39,7 @@ class Blockchain:
         """
         self.__difficulty = (num,)
 
-    def _save_local(self):# NOTE ADD DELIMITER TO SEP OBJ'S
+    def _save_local(self):# NOTE PICKLE
         """ Locally store blockchain as file """
         res = os.listdir()
         if '.chaindata' in res:
@@ -84,9 +84,9 @@ class Blockchain:
             'timestamp': time.time()
         }
         self.chain.append(Block(self.__proof_of_work(copy.deepcopy(block))))
-        res = self.validate_chain()
-        if res[0] is True:
-            return (True, self.chain[len(self.chain)-1]._properties['hash'])
+        success, res = self.validate_chain()
+        if success is True:
+            return True, self.chain[len(self.chain)-1]._properties['hash']
         return res
 
     def validate_chain(self):
@@ -94,32 +94,31 @@ class Blockchain:
         res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
         if res is False:
             self.__revert_to_valid_block()
-            return (False, 'Invalid genesis')
+            return False, 'Invalid genesis'
         for i in range(1, len(self.chain)):
-            print(i)
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
             # check types
             if self.__validate_types(props) is False:
                 self.__revert_to_valid_block()
-                return (False, 'Invalid data type')
+                return False, 'Invalid data type'
             # check index increment
             elif props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
-                return (False, 'Invalid index')
+                return False, 'Invalid index'
             # check prev_hash == prev_block.hash
             elif props['prev_hash'] != prev_props['hash']:
                 self.__revert_to_valid_block()
-                return (False, 'Invalid previous hash')
+                return False, 'Invalid previous hash'
             # check hash == sha(Block data)
             elif self.__validate_blocks_hash(props) is False:
                 self.__revert_to_valid_block()
-                return (False, 'Invalid hash or nonce')
+                return False, 'Invalid hash or nonce'
             # check immutable hash values
             elif self.__hard_hash_check(self.chain[i].get_properties(), self.chain[i-1].get_properties()) is False:
                 self.__revert_to_valid_block()
-                return (False, 'Invalid hash')
-        return (True, 'Success')
+                return False, 'Invalid hash'
+        return True, 'Success'
 
     def __hard_hash_check(self, set_props, prev_set_props):
         """ validate_chain helper: check immutable hash values """
