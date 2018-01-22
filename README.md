@@ -23,7 +23,7 @@ Adrian Agnic
 
 #### TODO:
 * profiling
-* refactor variable/method names and access
+* refactor variable/method names and access, refactor conditionals
 * utilize pickle for obj file write
 * unittests
 * CLI
