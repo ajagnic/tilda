@@ -22,6 +22,7 @@ Adrian Agnic
   ```
 
 #### TODO:
+* profiling
 * refactor variable/method names and access
 * utilize pickle for obj file write
 * unittests
