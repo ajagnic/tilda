@@ -22,6 +22,7 @@ Adrian Agnic
   ```
 
 #### TODO:
+* custom __cmp__
 * profiling
 * refactor variable/method names and access, refactor conditionals
 * utilize pickle for obj file write
