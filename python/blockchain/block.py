@@ -1,4 +1,3 @@
-""" Contains class structure of a single block """
 import hashlib
 
 __version__ = '0.0.2'
@@ -42,11 +41,11 @@ class Block:
         return False
 
     @staticmethod
-    def sha(properties):
+    def sha(properties):# NOTE ADD VALIDATE TYPES
         """ Method that accepts fields of a Block, returns hash of all fields
         :param properties: properties of a Block instance
         :type properties: dict
         """
-        cat = str(properties['data']) + str(properties['index']) + str(properties['nonce']) + str(properties['prev_hash']) + str(properties['destination']) + str(properties['origin']) + str(properties['timestamp'])
+        cat = "{1}{2}{3}{4}{5}{6}{7}".format(properties['data'], properties['index'], properties['nonce'], properties['prev_hash'], properties['destination'], properties['origin'], properties['timestamp'])
         hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
