@@ -12,16 +12,11 @@ class Block:
         :param dictionary: only containing fields listed in get_accepted_keys()
         :type dictionary: dict
         """
-        self.__set_accepted_keys()
-        if type(dictionary) is dict: self.__set_properties(dictionary)
+        self.__accepted_keys = ('data', 'index', 'nonce', 'prev_hash', 'destination', 'origin', 'timestamp')
+        if isinstance(dictionary, dict): self.__set_properties(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
-
-    def __set_accepted_keys(self):
-        # accepted keys are stored as a tuple to avoid re-assignment
-        # hash value will be generated in set_props
-        self.__accepted_keys = ('data', 'index', 'nonce', 'prev_hash', 'destination', 'origin', 'timestamp')
 
     def __set_properties(self, dictionary):
         if self.verify_dict(dictionary) is False: return None
@@ -39,7 +34,7 @@ class Block:
         return self.__properties
 
     def verify_dict(self, dictionary):
-        if type(dictionary) is dict:
+        if isinstance(dictionary, dict):
             if len(dictionary) == len(self.get_accepted_keys()):
                 for key, value in dictionary.items():
                     if key in self.get_accepted_keys():
