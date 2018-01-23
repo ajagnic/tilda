@@ -69,7 +69,7 @@ class Blockchain:
         :param destination: destination of block data
         :type destination: str
         """
-        if type(data) not in [str, int, list, dict]: return False
+        if not isinstance(data, (str, int, list, dict)): return False
         if all(isinstance(i, str) for i in [origin, destination]): return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
