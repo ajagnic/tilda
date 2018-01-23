@@ -1,4 +1,3 @@
-""" Contains blockchain class structure, properties and methods are terribly abstracted """
 import time
 import copy
 import os
@@ -71,7 +70,7 @@ class Blockchain:
         :type destination: str
         """
         if type(data) not in [str, int, list, dict]: return False
-        if type(origin) and type(destination) is not str: return False
+        if all(isinstance(i, str) for i in [origin, destination]): return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
@@ -137,26 +136,22 @@ class Blockchain:
                 return True
         return False
 
-    def __validate_types(self, properties):
-        """ validate_chain helper: check data types of Block """
-        if len(properties) == 8:
-            if isinstance(properties['timestamp'], float):
-                if all(isinstance(properties['data'], k) for k in [str, int, list, dict]):
-                    if all(isinstance(j, int) for j in [properties['nonce'], properties['index']]):
-                        if all(isinstance(i, str) for i in [properties['prev_hash'], properties['hash'], properties['destination'], properties['origin']]):
-                            return True
-        return False
+    # def __validate_types(self, properties):# NOTE TODO REFACTOR
+    #     """ validate_chain helper: check data types of Block """
+    #     if len(properties) == 8:
+    #         if isinstance(properties['timestamp'], float):
+    #             if all(isinstance(properties['data'], k) for k in [str, int, list, dict]):
+    #                 if all(isinstance(j, int) for j in [properties['nonce'], properties['index']]):
+    #                     if all(isinstance(i, str) for i in [properties['prev_hash'], properties['hash'], properties['destination'], properties['origin']]):
+    #                         return True
+    #     return False
 
     def __validate_gen(self, properties, set_hash):
-        if properties['index'] == 0:
+        if all(x == 0 for x in [properties['index'], properties['prev_hash'], properties['origin'], properties['destination']]):
             if properties['data'] == 'Genesis':
-                if properties['prev_hash'] == 0:
-                    if properties['origin'] == 0:
-                        if properties['destination'] == 0:
-                            props_c = copy.deepcopy(properties)
-                            del props_c['hash']
-                            hashed = Block.sha(props_c)
-                            if properties['hash'] == hashed:
-                                if set_hash[7] == hashed:
-                                    return True
+                props_c = copy.deepcopy(properties)
+                del props_c['hash']
+                hashed = Block.sha(props_c)
+                if all(j == hashed for j in [properties['hash'], set_hash[7]])
+                    return True
         return False
