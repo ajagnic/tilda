@@ -104,6 +104,6 @@ class Blockchain:
             if properties['data'] == 'Genesis':
                 props_c = copy.deepcopy(properties)
                 hashed = Block.sha(props_c)
-                if all(j == hashed for j in [properties['hash'], set_hash[7]])
+                if all(j == hashed for j in [properties['hash'], set_hash[7]]):
                     return True
         return False
