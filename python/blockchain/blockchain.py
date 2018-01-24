@@ -19,6 +19,7 @@ class Blockchain:
     def __revert_to_valid_block(self):
         print('REVERTED')
         self.__genesis()# NOTE TEMP
+        self.save_local()
 
     def __proof_of_work(self, dictionary):
         hashed = Block.sha(dictionary)
@@ -30,22 +31,28 @@ class Blockchain:
     def __set_difficulty(self, num):
         self.__difficulty = (num,)
 
-    def save_local(self):# NOTE PICKLE OR JSON
+    def save_local(self):
         res = os.listdir()
         if '.chaindata' in res:
-            doc = open('.chaindata/.data.txt', 'w')
-            for i in range(0, len(self.chain)):
-                doc.write(json.dumps(self.chain[i]._properties))
+            with open('.chaindata/.data.txt', 'w') as doc:
+                json.dump([obj.__dict__ for obj in self.chain], doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
             doc.close()
         else:
             os.mkdir('.chaindata')
-            new_doc = open('.chaindata/.data.txt', 'w')
-            for i in range(0, len(self.chain)):
-                new_doc.write(json.dumps(self.chain[i]._properties))
+            with open('.chaindata/.data.txt', 'w') as new_doc:
+                json.dump([obj.__dict__ for obj in self.chain], new_doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
             new_doc.close()
 
     def load_local(self):
-        pass
+        res = os.listdir()
+        if '.chaindata' in res:
+            with open('.chaindata/.data.txt', 'r') as doc:
+                chain_data = json.load(doc)
+            doc.close()
+            for obj in chain_data:
+                del obj['_properties']['hash']
+            self.chain = [Block(x['_properties']) for x in chain_data]
+            return self.validate_chain()
 
     def get_latest_block(self):
         return self.chain[(len(self.chain) - 1)]
@@ -76,8 +83,12 @@ class Blockchain:
             self.__revert_to_valid_block()
             return False, 'Invalid genesis'
         for i in range(1, len(self.chain)):
-            props = copy.deepcopy(self.chain[i]._properties)
-            prev_props = copy.deepcopy(self.chain[i - 1]._properties)
+            try:
+                props = copy.deepcopy(self.chain[i]._properties)
+                prev_props = copy.deepcopy(self.chain[i - 1]._properties)
+            except:
+                self.__revert_to_valid_block()
+                return False, 'Invalid Block object'
             if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
                 return False, 'Invalid index'
