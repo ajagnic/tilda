@@ -1,6 +1,6 @@
 import hashlib
 
-__version__ = '0.0.2'
+__version__ = '0.0.5'
 __author__ = 'Adrian Agnic'
 
 class Block:
@@ -24,11 +24,19 @@ class Block:
     def get_properties(self):
         return self.__properties
 
-    def verify_dict(self, dictionary):# NOTE REFACTOR
-        pass
+    def verify_dict(self, dictionary):
+        if isinstance(dictionary, dict):
+            if len(dictionary) == len(self.get_accepted_keys()):
+                for k, v in dictionary.items():
+                    if k in self.get_accepted_keys():
+                        pass
+                    else:
+                        return False
+                return True
+        return False
 
     @staticmethod
     def sha(properties):
-        cat = "{1}{2}{3}{4}{5}{6}{7}".format(properties['data'], properties['index'], properties['nonce'], properties['prev_hash'], properties['destination'], properties['origin'], properties['timestamp'])
+        cat = "{0}{1}{2}{3}{4}{5}{6}".format(properties['data'], properties['index'], properties['nonce'], properties['prev_hash'], properties['destination'], properties['origin'], properties['timestamp'])
         hashed = hashlib.sha256(cat.encode()).hexdigest()
         return hashed
