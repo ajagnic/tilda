@@ -23,7 +23,6 @@ Adrian Agnic
 
 #### TODO:
 * profiling
-* refactor variable/method names and access, refactor conditionals
 * serialize objects for file write
 * unittests
 * CLI
