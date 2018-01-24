@@ -22,7 +22,7 @@ class Blockchain:
 
     def __proof_of_work(self, dictionary):
         hashed = Block.sha(dictionary)
-        while hashed[0:self.__difficulty[0]] != '0' * self.__difficulty[0]:
+        while hashed[:self.__difficulty[0]] != '0' * self.__difficulty[0]:
             dictionary['nonce'] += 1
             hashed = Block.sha(dictionary)
         return dictionary
@@ -30,7 +30,7 @@ class Blockchain:
     def __set_difficulty(self, num):
         self.__difficulty = (num,)
 
-    def _save_local(self):# NOTE PICKLE OR JSON
+    def save_local(self):# NOTE PICKLE OR JSON
         res = os.listdir()
         if '.chaindata' in res:
             doc = open('.chaindata/.data.txt', 'w')
@@ -44,7 +44,7 @@ class Blockchain:
                 new_doc.write(json.dumps(self.chain[i]._properties))
             new_doc.close()
 
-    def _load_local(self):
+    def load_local(self):
         pass
 
     def get_latest_block(self):
@@ -78,7 +78,7 @@ class Blockchain:
         for i in range(1, len(self.chain)):
             props = copy.deepcopy(self.chain[i]._properties)
             prev_props = copy.deepcopy(self.chain[i - 1]._properties)
-            elif props['index'] != (prev_props['index'] + 1):
+            if props['index'] != (prev_props['index'] + 1):
                 self.__revert_to_valid_block()
                 return False, 'Invalid index'
             elif props['prev_hash'] != prev_props['hash']:
@@ -90,21 +90,14 @@ class Blockchain:
         return True, 'Success'
 
     def __hash_check(self, props, iprops, prev_iprops):
-        pass
-
-    # def __hard_hash_check(self, set_props, prev_set_props):
-    #     if len(set_props) == len(prev_set_props):
-    #         if set_props[3] == prev_set_props[7]:
-    #             return True
-    #     return False
-    #
-    # def __validate_blocks_hash(self, properties):#NOTE TODO REFACTOR FOR BOTH _props & __props
-    #     props_copy = copy.deepcopy(properties)
-    #     hashed = Block.sha(props_copy)
-    #     if properties['hash'] == hashed:
-    #         if hashed[0:self.__difficulty[0]] == '0' * self.__difficulty[0]:
-    #             return True
-    #     return False
+        if len(iprops) == len(prev_iprops):
+            if iprops[3] == prev_iprops[7]:
+                props_c = copy.deepcopy(props)
+                hashed = Block.sha(props_c)
+                if all(x == hashed for x in [props['hash'], iprops[7]]):
+                    if hashed[:self.__difficulty[0]] == '0' * self.__difficulty[0]:
+                        return True
+        return False
 
     def __validate_gen(self, properties, set_hash):
         if all(x == 0 for x in [properties['index'], properties['prev_hash'], properties['origin'], properties['destination']]):
