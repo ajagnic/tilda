@@ -4,7 +4,7 @@ import os
 import json
 from blockchain.block import Block
 
-__version__ = '0.0.2'
+__version__ = '0.0.5'
 __author__ = 'Adrian Agnic'
 
 class Blockchain:
@@ -52,7 +52,7 @@ class Blockchain:
 
     def add_new_block(self, data, origin, destination):
         if not isinstance(data, (str, int, list, dict)): return False
-        if all(isinstance(i, str) for i in [origin, destination]): return False
+        if not all(isinstance(i, str) for i in [origin, destination]): return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
