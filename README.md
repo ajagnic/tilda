@@ -23,8 +23,8 @@ Adrian Agnic
 
 #### TODO:
 * profiling
-* serialize objects for file write
 * unittests
+* dev server
 * CLI
 * Dockerfile
-* dev server
+* sk/pk signed packet usage in data
