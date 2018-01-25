@@ -35,12 +35,12 @@ class Blockchain:
         res = os.listdir()
         if '.chaindata' in res:
             with open('.chaindata/.data.txt', 'w') as doc:
-                json.dump([obj.__dict__ for obj in self.chain], doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
+                json.dump([obj.__dict__['_properties'] for obj in self.chain], doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
             doc.close()
         else:
             os.mkdir('.chaindata')
             with open('.chaindata/.data.txt', 'w') as new_doc:
-                json.dump([obj.__dict__ for obj in self.chain], new_doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
+                json.dump([obj.__dict__['_properties'] for obj in self.chain], new_doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
             new_doc.close()
 
     def load_local(self):
@@ -50,8 +50,8 @@ class Blockchain:
                 chain_data = json.load(doc)
             doc.close()
             for obj in chain_data:
-                del obj['_properties']['hash']
-            self.chain = [Block(x['_properties']) for x in chain_data]
+                del obj['hash']
+            self.chain = [Block(x) for x in chain_data]
             return self.validate_chain()
 
     def get_latest_block(self):
