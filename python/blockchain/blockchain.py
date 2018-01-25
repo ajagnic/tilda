@@ -18,7 +18,7 @@ class Blockchain:
 
     def __revert(self, index=0):
         del self.chain[index:]
-        print('REVERTED')
+        print('!!REVERTED!!')
         success, res = self.validate_chain()
         if success if True:
             self.save_local()
