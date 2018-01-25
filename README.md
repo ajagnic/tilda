@@ -22,6 +22,7 @@ Adrian Agnic
   ```
 
 #### TODO:
+* cythonize
 * profiling
 * unittests
 * Dockerfile
