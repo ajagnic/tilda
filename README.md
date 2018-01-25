@@ -25,7 +25,5 @@ Adrian Agnic
 * python slots?
 * profiling
 * unittests
-* dev server
-* CLI
 * Dockerfile
 * sk/pk signed packet usage in data
