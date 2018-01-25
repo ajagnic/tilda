@@ -11,7 +11,7 @@ class Blockchain:
 
     def __init__(self):
         self.__set_difficulty(6)
-        self.__genesis()
+        self.load_local()
 
     def __genesis(self):
         self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'destination':0, 'origin':0, 'timestamp':time.time()}))]
@@ -20,7 +20,7 @@ class Blockchain:
         del self.chain[index:]
         print('!!REVERTED!!')
         success, res = self.validate_chain()
-        if success if True:
+        if success is True:
             self.save_local()
         return res
 
