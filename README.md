@@ -22,6 +22,7 @@ Adrian Agnic
   ```
 
 #### TODO:
+* python slots?
 * profiling
 * unittests
 * dev server
