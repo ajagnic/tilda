@@ -10,16 +10,19 @@ __author__ = 'Adrian Agnic'
 class Blockchain:
 
     def __init__(self):
-        self.__set_difficulty(5)
+        self.__set_difficulty(6)
         self.__genesis()
 
     def __genesis(self):
         self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'destination':0, 'origin':0, 'timestamp':time.time()}))]
 
-    def __revert(self):
+    def __revert(self, index=0):
+        del self.chain[index:]
         print('REVERTED')
-        self.__genesis()# NOTE TEMP
-        self.save_local()
+        success, res = self.validate_chain()
+        if success if True:
+            self.save_local()
+        return res
 
     def __proof_of_work(self, dictionary):
         hashed = Block.sha(dictionary)
@@ -80,23 +83,23 @@ class Blockchain:
     def validate_chain(self):
         res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
         if res is False:
-            self.__revert()
+            self.__genesis()
             return False, 'Invalid genesis'
         for i in range(1, len(self.chain)):
             try:
                 props = copy.deepcopy(self.chain[i]._properties)
                 prev_props = copy.deepcopy(self.chain[i - 1]._properties)
             except:
-                self.__revert()
+                self.__revert(i)
                 return False, 'Invalid Block object'
             if props['index'] != (prev_props['index'] + 1):
-                self.__revert()
+                self.__revert(i)
                 return False, 'Invalid index'
             elif props['prev_hash'] != prev_props['hash']:
-                self.__revert()
+                self.__revert(i)
                 return False, 'Invalid previous hash'
             elif self.__hash_check(props, self.chain[i].get_properties(), self.chain[i-1].get_properties()) is False:
-                self.__revert()
+                self.__revert(i)
                 return False, 'Invalid hash'
         return True, 'Success'
 
