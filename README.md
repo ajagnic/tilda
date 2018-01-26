@@ -26,4 +26,5 @@ Adrian Agnic
 * profiling
 * unittests
 * Dockerfile
+* config
 * sk/pk signed packet usage in data
