@@ -1,10 +1,16 @@
 import json
 import copy
 from flask import Flask, request
-from buff.er import Buffer
 
 __version__ = '0.0.1'
 __author__ = 'Adrian Agnic'
+
+class Buffer:
+    def __init__(self):
+        self.list = []
+
+    def size(self):
+        return len(self.list)
 
 bfr = Buffer()
 app = Flask(__name__.split('.')[0])
