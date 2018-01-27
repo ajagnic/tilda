@@ -13,6 +13,11 @@ class Block:
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
 
     def __set_attr(self, dictionary):
+        """
+        Store input dict as Block._properties
+        Hash values of Block._properties and assign to new key: 'hash'
+        Store Block._properties values as immutable tuple: Block.__properties
+        """
         if self.verify(dictionary) is False: return None
         self._properties = {key: value for key, value in dictionary.items()}
         self._properties['hash'] = self.sha(self._properties)
@@ -25,6 +30,9 @@ class Block:
         return self.__properties
 
     def verify(self, dictionary):
+        """
+        Verify input dict and Block.__accepted_keys have same amount of keys, and the key names are equal
+        """
         if isinstance(dictionary, dict):
             if len(dictionary) == len(self.get_accepted_keys()):
                 for k, v in dictionary.items():
