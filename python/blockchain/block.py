@@ -3,11 +3,13 @@ import hashlib
 __version__ = '0.0.5'
 __author__ = 'Adrian Agnic'
 
+
 class Block:
 
     def __init__(self, dictionary):
         self.__accepted_keys = ('data', 'index', 'nonce', 'prev_hash', 'destination', 'origin', 'timestamp')
-        if isinstance(dictionary, dict): self.__set_attr(dictionary)
+        if isinstance(dictionary, dict): 
+            self.__set_attr(dictionary)
 
     def __repr__(self):
         return "Index: {},\n Hash: {},\n PreviousHash: {},\n Timestamp: {}\n".format(self._properties['index'], self._properties['hash'], self._properties['prev_hash'], self._properties['timestamp'])
@@ -17,8 +19,10 @@ class Block:
         Store input dict as Block._properties
         Hash values of Block._properties and assign to new key: 'hash'
         Store Block._properties values as immutable tuple: Block.__properties
+        :type dictionary: dict
         """
-        if self.verify(dictionary) is False: return None
+        if self.verify(dictionary) is False: 
+            return None
         self._properties = {key: value for key, value in dictionary.items()}
         self._properties['hash'] = self.sha(self._properties)
         self.__properties = (self._properties['data'], self._properties['index'], self._properties['nonce'], self._properties['prev_hash'], self._properties['destination'], self._properties['origin'], self._properties['timestamp'], self._properties['hash'])

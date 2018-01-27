@@ -18,6 +18,7 @@ class Blockchain:
 
     def __revert(self, index=0):
         del self.chain[index:]
+        if len(self.chain) == 0: self.__genesis()
         print('!!REVERTED!!')
         success, res = self.validate_chain()
         if success is True:
@@ -59,6 +60,9 @@ class Blockchain:
                 del obj['hash']
             self.chain = [Block(x) for x in chain_data]
             return self.validate_chain()
+        else:
+            self.__genesis()
+            self.save_local()
 
     def get_latest_block(self):
         return self.chain[(len(self.chain) - 1)]
@@ -128,5 +132,6 @@ class Blockchain:
                 props_c = copy.deepcopy(properties)
                 hashed = Block.sha(props_c)
                 if all(j == hashed for j in [properties['hash'], set_hash[7]]):
-                    return True
+                    if hashed[:self.__difficulty[0]] == '0' * self.__difficulty[0]:
+                        return True
         return False
