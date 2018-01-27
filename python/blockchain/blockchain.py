@@ -25,6 +25,9 @@ class Blockchain:
         return res
 
     def __proof_of_work(self, dictionary):
+        """
+        Increment a property 'nonce' until the resulting hash has a leading amount of zeros equal to Blockchain.__difficulty
+        """
         hashed = Block.sha(dictionary)
         while hashed[:self.__difficulty[0]] != '0' * self.__difficulty[0]:
             dictionary['nonce'] += 1
@@ -104,6 +107,12 @@ class Blockchain:
         return True, 'Success'
 
     def __hash_check(self, props, iprops, prev_iprops):
+        """
+        Incorrect Blocks are initialized as empty dicts, check lengths to detect that
+        Check property:'prev_hash' equals property:'hash' of previous Block
+        Verify hash of all properties equals the property:'hash' value
+        Check resulting hash has a leading amount of zeros equal to Blockchain.__difficulty (check if proof of work was used)
+        """
         if len(iprops) == len(prev_iprops):
             if iprops[3] == prev_iprops[7]:
                 props_c = copy.deepcopy(props)
