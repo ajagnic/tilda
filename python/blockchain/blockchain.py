@@ -100,7 +100,7 @@ class Blockchain:
             try:
                 props = copy.deepcopy(self.chain[i]._properties)
                 prev_props = copy.deepcopy(self.chain[i - 1]._properties)
-            except:
+            except AttributeError:
                 self.__revert(i)
                 return False, 'Invalid Block object'
             if props['index'] != (prev_props['index'] + 1):
