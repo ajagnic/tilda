@@ -7,6 +7,7 @@ from blockchain.block import Block
 __version__ = '0.0.5'
 __author__ = 'Adrian Agnic'
 
+
 class Blockchain:
 
     def __init__(self):
@@ -14,11 +15,12 @@ class Blockchain:
         self.load_local()
 
     def __genesis(self):
-        self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index':0, 'nonce':0, 'prev_hash':0, 'destination':0, 'origin':0, 'timestamp':time.time()}))]
+        self.chain = [Block(self.__proof_of_work({'data': 'Genesis', 'index': 0, 'nonce': 0, 'prev_hash': 0, 'destination': 0, 'origin': 0, 'timestamp': time.time()}))]
 
     def __revert(self, index=0):
         del self.chain[index:]
-        if len(self.chain) == 0: self.__genesis()
+        if len(self.chain) == 0:
+            self.__genesis()
         print('!!REVERTED!!')
         success, res = self.validate_chain()
         if success is True:
@@ -68,14 +70,16 @@ class Blockchain:
         return self.chain[(len(self.chain) - 1)]
 
     def add_new_block(self, data, origin, destination):
-        if not isinstance(data, (str, int, list, dict)): return False
-        if not all(isinstance(i, str) for i in [origin, destination]): return False
+        if not isinstance(data, (str, int, list, dict)):
+            return False
+        if not all(isinstance(i, str) for i in [origin, destination]):
+            return False
         prev_block = self.get_latest_block()
         prev_props = prev_block.get_properties()
         block = {
             'data': data,
             'index': (prev_props[1] + 1),
-            'nonce':0,
+            'nonce': 0,
             'prev_hash': prev_props[7],
             'destination': destination,
             'origin': origin,

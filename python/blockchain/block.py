@@ -19,7 +19,6 @@ class Block:
         Store input dict as Block._properties
         Hash values of Block._properties and assign to new key: 'hash'
         Store Block._properties values as immutable tuple: Block.__properties
-        :type dictionary: dict
         """
         if self.verify(dictionary) is False: 
             return None
