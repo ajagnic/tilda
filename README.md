@@ -6,7 +6,7 @@ Adrian Agnic
 ##### Current Usage Instructions:
 * Requirements:
   * python3
-* Run:
+#### Run:
   ```commandline
   cd tilde/python/
   ```
