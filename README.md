@@ -19,11 +19,13 @@ Adrian Agnic
   bc = Blockchain()
   bc.add_new_block('Hello World', 'me', 'you')
   bc.chain
+  bc.save_local()
+  bc.load_local()
+  bc.validate_chain()
   ```
 
 #### TODO:
 * cythonize
-* profiling
 * unittests
 * Dockerfile
 * config
