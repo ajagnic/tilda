@@ -92,7 +92,11 @@ class Blockchain:
         return res
 
     def validate_chain(self):
-        res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
+        try:
+            res = self.__validate_gen(self.chain[0]._properties, self.chain[0].get_properties())
+        except AttributeError:
+            self.__genesis()
+            return False, 'Invalid genesis'
         if res is False:
             self.__genesis()
             return False, 'Invalid genesis'
