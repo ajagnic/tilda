@@ -41,7 +41,7 @@ class Blockchain:
         self.__difficulty = (num,)
 
     def save_local(self):
-        res = os.listdir()
+        res = os.listdir('~/')
         if '.chaindata' in res:
             with open('.chaindata/.data.txt', 'w') as doc:
                 json.dump([obj.__dict__['_properties'] for obj in self.chain], doc, ensure_ascii=True, indent=4)#, separators=(',', ':'))
@@ -53,7 +53,7 @@ class Blockchain:
             new_doc.close()
 
     def load_local(self):
-        res = os.listdir()
+        res = os.listdir('~/')
         if '.chaindata' in res:
             with open('.chaindata/.data.txt', 'r') as doc:
                 chain_data = json.load(doc)
