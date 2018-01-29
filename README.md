@@ -25,8 +25,8 @@ Adrian Agnic
   ```
 
 #### TODO:
+* pretty big refactor w/ block structure
 * cythonize
 * unittests
 * Dockerfile
-* config
 * sk/pk signed packet usage in data
