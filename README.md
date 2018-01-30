@@ -26,6 +26,7 @@ Adrian Agnic
 
 #### TODO:
 * pretty big refactor w/ block structure
+  * implement header/legitimate block struct
   * rely just on hash rather than immutables
   * double-sha because thats better?
 * cythonize
