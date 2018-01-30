@@ -29,4 +29,3 @@ Adrian Agnic
 * cythonize
 * unittests
 * Dockerfile
-* sk/pk signed packet usage in data
