@@ -26,6 +26,7 @@ Adrian Agnic
 
 #### TODO:
 * pretty big refactor w/ block structure
+ * rely just on hash rather than immutables
 * cythonize
 * unittests
 * Dockerfile
