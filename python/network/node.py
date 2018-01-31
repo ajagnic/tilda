@@ -2,6 +2,7 @@
 Server/Client Node
 """
 import socket
+import threading
 
 __version__ = '0.0.1'
 __author__ = 'Adrian Agnic'
@@ -31,13 +32,24 @@ class Node:
         else:
             self.name = "{}:{}".format(self.host, self.port)
 
-    def listen(self):
+    def listen_connections(self):
         """
         main loop
         """
-        pass
+        s = self.server_socket(self.port)
+        s.settimeout(2)
+        while not self.stop:
+            try:
+                c_s, c_addr = s.accept()
+                c_s.settimeout(None)
+                t = threading.Thread(target=self.handlepeer, args=[c_s])
+                t.start()
+            except KeyboardInterrupt:
+                self.stop = True
+                continue
+        s.close()
 
-    def open_socket(self, port, backlog=0):
+    def server_socket(self, port, backlog=5):
         """ open socket for incoming connections
         :param port: int: port to bind to
         :param backlog: int: amount of connections to accept before refuse
