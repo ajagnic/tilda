@@ -99,8 +99,8 @@ class NodeConnection:
         self.sd = self.s.makefile('rw', 0)
 
     def makemsg(self, mtype, mdata):
-        msglen = len(mdata)
-    	msg = struct.pack( "!4sL%ds" % mlen, mtype, mlen, mdata )
+        mlen = len(mdata)
+    	msg = struct.pack("!4sL%ds" % mlen, mtype, mlen, mdata)
     	return msg
 
     def send(self, mtype, mdata):
