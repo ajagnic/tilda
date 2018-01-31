@@ -100,8 +100,8 @@ class NodeConnection:
 
     def makemsg(self, mtype, mdata):
         mlen = len(mdata)
-    	msg = struct.pack("!4sL%ds" % mlen, mtype, mlen, mdata)
-    	return msg
+        msg = struct.pack("!4sL%ds" % mlen, mtype, mlen, mdata)
+        return msg
 
     def send(self, mtype, mdata):
         try:
