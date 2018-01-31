@@ -3,6 +3,7 @@ Server/Client Node
 """
 import socket
 import threading
+import struct
 
 __version__ = '0.0.1'
 __author__ = 'Adrian Agnic'
@@ -42,7 +43,7 @@ class Node:
             try:
                 c_s, c_addr = s.accept()
                 c_s.settimeout(None)
-                t = threading.Thread(target=self.handlepeer, args=[c_s])
+                t = threading.Thread(target=self.handle_peer, args=[c_s])
                 t.start()
             except KeyboardInterrupt:
                 self.stop = True
@@ -63,8 +64,72 @@ class Node:
         s.listen(backlog)
         return s
 
+    def handle_peer(self, client_socket):
+        """
+        .
+        """
+        host, port = client_socket.getpeername()
+        peer = NodeConnection(None, host, port, client_socket)
+        try:
+            mtype, mdata = peer.recv()
+            self.handlers[mtype](peer, mdata)
+        except KeyboardInterrupt:
+            raise
+        peer.close()
+
     def find_host(self):
         """
-        locate host of this node
+        locate hostname of this node
         """
-        pass
+        s = socket.socket()
+        s.connect(("www.google.com", 80))
+        self.host = s.getsockname()[0]
+        s.close()
+
+
+class NodeConnection:
+
+    def __init__(self, name, host, port, sock=None):
+        self.name = name
+        if not sock:
+            self.s = socket.socket()
+            self.s.connect((host, port))
+        else:
+            self.s = sock
+        self.sd = self.s.makefile('rw', 0)
+
+    def makemsg(self, mtype, mdata):
+        msglen = len(mdata)
+    	msg = struct.pack( "!4sL%ds" % mlen, mtype, mlen, mdata )
+    	return msg
+
+    def send(self, mtype, mdata):
+        try:
+            msg = self.makemsg(mtype, mdata)
+            self.sd.write(msg)
+            self.sd.flush()
+        except KeyboardInterrupt:
+            raise
+        return True
+
+    def recv(self):
+        try:
+            mtype = self.sd.read(4)
+            lenstr = self.sd.read(4)
+            mlen = int(struct.unpack("!L", lenstr)[0])
+            msg = ""
+            while len(msg) != mlen:
+                data = self.sd.read(min(2048, mlen - len(msg)))
+                if not len(data):
+                    break
+                msg += data
+            if len(msg) != mlen:
+                return (None, None)
+        except KeyboardInterrupt:
+            raise
+        return (mtype, msg)
+
+    def close(self):
+        self.s.close()
+        self.s = None
+        self.sd = None
