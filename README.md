@@ -3,6 +3,9 @@
 #### Developer:
 Adrian Agnic
 
+### What is this
+tilde will eventually be a peer-to-peer networking client utilizing a blockchain structure for distributed storage
+
 ##### Current Usage Instructions:
 * Requirements:
   * python3
@@ -25,10 +28,12 @@ Adrian Agnic
   ```
 
 #### TODO:
+* networking
 * pretty big refactor w/ block structure
   * implement header/legitimate block struct
   * rely just on hash rather than immutables
-  * double-sha because thats better?
+  * double-sha 
+* interface
 * cythonize
 * unittests
 * Dockerfile
