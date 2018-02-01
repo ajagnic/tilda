@@ -6,8 +6,8 @@ __version__='0.0.1'
 
 
 class Mother:
-    
-    __slots__=['host', 'port', 's', 'ips', 'maxPeers']
+
+    __slots__=['host','port','s','ips','maxPeers']
 
     def __init__(self, maxPeers=0):
         self.host="127.0.0.1"
@@ -18,13 +18,15 @@ class Mother:
 
     def up(self):
         self.s=socket.socket()
-        self.s.settimeout(10)
         self.s.bind((self.host,self.port))
         self.s.listen(self.maxPeers)
-        s, addr=self.s.accept()
-        self.ips.append(addr)
-        print("New IP: {}".format(str(addr)))
-        t = threading.Thread(target=self.recv, args=[s])
+        while True:
+            s, addr=self.s.accept()
+            self.ips.append(addr)
+            print("New IP: {}".format(str(addr)))
+            t=threading.Thread(target=self.recv,args=[s])
+            t.daemon=True
+            t.start()
 
     def recv(self, s):
         while True:
