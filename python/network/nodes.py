@@ -1,4 +1,5 @@
 import socket
+import threading
 
 __author__='Adrian Agnic'
 __version__='0.0.1'
@@ -23,7 +24,7 @@ class Mother:
         s, addr=self.s.accept()
         self.ips.append(addr)
         print("New IP: {}".format(str(addr)))
-        self.recv(s)
+        t = threading.Thread(target=self.recv, args=[s])
 
     def recv(self, s):
         while True:
