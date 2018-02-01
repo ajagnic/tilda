@@ -4,7 +4,7 @@
 Adrian Agnic
 
 ### What is this
-tilde will eventually be a peer-to-peer networking client utilizing a blockchain structure for distributed storage
+tilde will eventually be a LOCAL peer-to-peer networking client utilizing a blockchain structure for distributed storage
 
 ##### Current Usage Instructions:
 * Requirements:
