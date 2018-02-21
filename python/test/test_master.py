@@ -11,4 +11,4 @@ class TestMaster(unittest.TestCase):
         print(tilde)
 
 if __name__ == '__main__':
-    main()
+    unittest.main()
