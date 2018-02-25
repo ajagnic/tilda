@@ -7,10 +7,8 @@ __version__ = "0.0.1"
 
 class TestMaster(unittest.TestCase):
     def setUp(self):
-        self.tilde = Tilde("test.db")
+        self.tilde = Tilde("test.bc")
 
-    def test_tilde_connect(self):
-        self.assertTrue(self.tilde.connect())
 
 if __name__ == '__main__':
     unittest.main()
