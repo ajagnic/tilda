@@ -1,60 +1,42 @@
-import time
-import hashlib
+from time import time
 
 __version__ = '0.0.1'
 __author__ = 'Adrian Agnic'
 
 
 class Tilde:
-    """ storage interface class """
 
-    def __init__(self, filepath):
-        pass
+    def __init__(self):
+        self.bc = Blockchain()
 
     def save(self, data):
-        """ add new block """
-        pass
-
-    def commit(self):
-        """ mine and store """
-        pass
+        self.bc.add(data)
 
 
 
 class Blockchain:
 
     def __init__(self):
-        pass
+        self.buffer = []
 
     def add(self, data):
-        pass
+        block = Block(data)
+        self.buffer.append(block)
 
 
 
 class Block:
 
-    def __init__(self, data, prev_block):
-        self.__dict__ = self.create(data, prev_block)
+    def __init__(self, data):
+        self.__dict__.update(self.create(data))
 
-    def create(self, data, prev_block):
-        """
-        :data: any allowed in dict
-        :prev_block: dict
-        :return: dict
-        """
-        prev_index, prev_hash = prev_block["head"]["index"], prev_block["head"]["hash"]
+    def create(self, data):
         block = {
             "body": {
                 "meta": {
-                    "index": prev_index + 1,
-                    "time": time.time(),
-                    "prevHash": prev_hash,
-                    "nonce": None
+                    "timestamp": time()
                 },
                 "data": data
             }
         }
         return block
-
-    def hash(self, block):
-        pass
