@@ -10,7 +10,7 @@ __author__ = 'Adrian Agnic'
 
 class Blockchain:
 
-    def __init__(self, difficulty):
+    def __init__(self, difficulty=6):
         self.__set_difficulty(difficulty)
         self.load_local()
 
